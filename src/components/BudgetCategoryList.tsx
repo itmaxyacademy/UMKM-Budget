@@ -165,8 +165,8 @@ export function BudgetCategoryList({ title, groups, onUpdateGroups, type, mode =
             {/* Items Table */}
             <div className="overflow-x-auto">
               <table className="w-full text-left border-collapse">
-                <thead className="sticky top-0 bg-white border-b border-slate-200">
-                  <tr className="text-[11px] font-bold text-slate-400 uppercase tracking-widest">
+                <thead className="sticky top-0 bg-white dark:bg-slate-800 border-b border-slate-200 dark:border-slate-700 z-10">
+                  <tr className="text-[11px] font-bold text-slate-400 dark:text-slate-500 uppercase tracking-widest">
                     <th className="px-6 py-4">Item</th>
                     <th className="px-4 py-4 w-32">Durasi</th>
                     <th className="px-4 py-4 w-48">Rencana (Rp)</th>
@@ -175,12 +175,12 @@ export function BudgetCategoryList({ title, groups, onUpdateGroups, type, mode =
                     <th className="px-6 py-4 w-16"></th>
                   </tr>
                 </thead>
-                <tbody className="divide-y divide-slate-100">
+                <tbody className="divide-y divide-slate-100 dark:divide-slate-700">
                   {(group.items || []).map(item => {
                     const itemPlanned = item.planned;
                     const itemSisa = itemPlanned - item.actual;
                     return (
-                    <tr key={item.id} className="hover:bg-slate-50 transition-colors">
+                    <tr key={item.id} className="hover:bg-slate-50 dark:hover:bg-slate-700/50 transition-colors">
                       <td className="px-6 py-4 font-medium">
                         {editingItemId === item.id ? (
                           <div className="flex items-center gap-2">
@@ -188,7 +188,7 @@ export function BudgetCategoryList({ title, groups, onUpdateGroups, type, mode =
                               type="text"
                               value={editName}
                               onChange={(e) => setEditName(e.target.value)}
-                              className="border border-slate-300 rounded px-2 py-1 text-sm w-full focus:outline-none focus:border-indigo-500"
+                              className="border border-slate-300 dark:border-slate-600 dark:bg-slate-700 dark:text-white rounded px-2 py-1 text-sm w-full focus:outline-none focus:border-indigo-500"
                               autoFocus
                               onKeyDown={(e) => {
                                 if (e.key === 'Enter') {
@@ -202,14 +202,14 @@ export function BudgetCategoryList({ title, groups, onUpdateGroups, type, mode =
                                 handleUpdateItem(group.id, item.id, 'name', editName);
                                 setEditingItemId(null);
                               }}
-                              className="text-emerald-600 hover:bg-emerald-50 p-1 rounded"
+                              className="text-emerald-600 hover:bg-emerald-50 dark:hover:bg-emerald-900/30 p-1 rounded"
                             >
                               <Check size={16} />
                             </button>
                           </div>
                         ) : (
                           <div className="flex items-center gap-2 group/item">
-                            <span className="text-slate-800">{item.name}</span>
+                            <span className="text-slate-800 dark:text-slate-200">{item.name}</span>
                             <button
                               onClick={() => {
                                 setEditingItemId(item.id);
@@ -226,7 +226,7 @@ export function BudgetCategoryList({ title, groups, onUpdateGroups, type, mode =
                         <select
                           value={item.duration || 1}
                           onChange={(e) => handleUpdateItem(group.id, item.id, 'duration', Number(e.target.value))}
-                          className="bg-transparent border-b border-transparent hover:border-slate-300 focus:border-indigo-500 focus:outline-none py-1 text-slate-600 text-sm w-full"
+                          className="bg-transparent border-b border-transparent hover:border-slate-300 dark:hover:border-slate-600 focus:border-indigo-500 focus:outline-none py-1 text-slate-600 dark:text-slate-300 text-sm w-full [&>option]:dark:bg-slate-800"
                         >
                           <option value={1}>Bulanan</option>
                           <option value={3}>3 Bulan</option>
@@ -239,7 +239,7 @@ export function BudgetCategoryList({ title, groups, onUpdateGroups, type, mode =
                           value={itemPlanned || 0}
                           onChange={(value) => handleUpdateItem(group.id, item.id, 'planned', value)}
                           currencyCode={currency}
-                          className="w-full bg-transparent border-b border-transparent hover:border-slate-300 focus:border-indigo-500 focus:outline-none text-slate-800 py-1"
+                          className="w-full bg-transparent border-b border-transparent hover:border-slate-300 dark:hover:border-slate-600 focus:border-indigo-500 focus:outline-none text-slate-800 dark:text-slate-200 py-1"
                           placeholder="0"
                         />
                       </td>
@@ -249,8 +249,8 @@ export function BudgetCategoryList({ title, groups, onUpdateGroups, type, mode =
                             value={item.actual || 0}
                             onChange={(value) => handleUpdateItem(group.id, item.id, 'actual', value)}
                             currencyCode={currency}
-                            className={`w-full bg-transparent border-b border-transparent hover:border-slate-300 focus:border-indigo-500 focus:outline-none py-1 ${
-                              type === 'expense' && item.actual > itemPlanned ? 'text-rose-600 font-bold' : 'text-slate-800'
+                            className={`w-full bg-transparent border-b border-transparent hover:border-slate-300 dark:hover:border-slate-600 focus:border-indigo-500 focus:outline-none py-1 ${
+                              type === 'expense' && item.actual > itemPlanned ? 'text-rose-600 dark:text-rose-400 font-bold' : 'text-slate-800 dark:text-slate-200'
                             }`}
                             placeholder="0"
                           />
@@ -258,7 +258,7 @@ export function BudgetCategoryList({ title, groups, onUpdateGroups, type, mode =
                       )}
                       {mode === 'realization' && (
                         <td className="px-4 py-4">
-                          <span className={`font-semibold ${itemSisa < 0 ? 'text-rose-500' : 'text-emerald-600'}`}>
+                          <span className={`font-semibold ${itemSisa < 0 ? 'text-rose-500 dark:text-rose-400' : 'text-emerald-600 dark:text-emerald-400'}`}>
                             {formatCurrency(itemSisa, currency)}
                           </span>
                         </td>
@@ -286,10 +286,10 @@ export function BudgetCategoryList({ title, groups, onUpdateGroups, type, mode =
             </div>
 
             {/* Add Item Button */}
-            <div className="px-6 py-4 bg-white border-t border-slate-100">
+            <div className="px-6 py-4 bg-white dark:bg-slate-800 border-t border-slate-100 dark:border-slate-700">
               <button
                 onClick={() => handleAddItem(group.id)}
-                className="flex items-center gap-1 text-[13px] font-bold uppercase tracking-wide text-indigo-600 hover:text-indigo-700 transition-colors"
+                className="flex items-center gap-1 text-[13px] font-bold uppercase tracking-wide text-indigo-600 dark:text-indigo-400 hover:text-indigo-700 dark:hover:text-indigo-300 transition-colors"
               >
                 <Plus size={16} />
                 Tambah Item
@@ -299,8 +299,8 @@ export function BudgetCategoryList({ title, groups, onUpdateGroups, type, mode =
         ))}
 
         {groups.length === 0 && (
-          <div className="text-center py-12 bg-white rounded-xl border border-dashed border-slate-300">
-            <p className="text-slate-500">Belum ada kategori. Silakan tambah kategori baru.</p>
+          <div className="text-center py-12 bg-white dark:bg-slate-800 rounded-xl border border-dashed border-slate-300 dark:border-slate-700">
+            <p className="text-slate-500 dark:text-slate-400">Belum ada kategori. Silakan tambah kategori baru.</p>
           </div>
         )}
       </div>

@@ -76,38 +76,38 @@ export function SettingsModal({ isOpen, onClose, data, onUpdateData, onImportDat
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/50 backdrop-blur-sm">
-      <div className="bg-white rounded-2xl shadow-xl w-full max-w-md max-h-[90vh] overflow-hidden flex flex-col">
-        <div className="flex items-center justify-between px-6 py-4 border-b border-slate-100 bg-slate-50 shrink-0">
-          <h2 className="text-lg font-bold text-slate-800 flex items-center gap-2">
-            <Settings size={20} className="text-indigo-600" />
+      <div className="bg-white dark:bg-slate-800 rounded-2xl shadow-xl w-full max-w-md max-h-[90vh] overflow-hidden flex flex-col border dark:border-slate-700">
+        <div className="flex items-center justify-between px-6 py-4 border-b border-slate-100 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 shrink-0">
+          <h2 className="text-lg font-bold text-slate-800 dark:text-slate-100 flex items-center gap-2">
+            <Settings size={20} className="text-indigo-600 dark:text-indigo-400" />
             Pengaturan
           </h2>
-          <button onClick={onClose} className="text-slate-400 hover:text-slate-600 transition-colors">
+          <button onClick={onClose} className="text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 transition-colors">
             <X size={20} />
           </button>
         </div>
 
         <div className="p-6 flex flex-col gap-6 overflow-y-auto">
           <div className="space-y-4">
-            <h3 className="text-sm font-bold text-slate-400 uppercase tracking-wider">Profil Pengguna</h3>
+            <h3 className="text-sm font-bold text-slate-400 dark:text-slate-500 uppercase tracking-wider">Profil Pengguna</h3>
             
             <div>
-              <label className="block text-sm font-medium text-slate-700 mb-1">Nama</label>
+              <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">Nama</label>
               <input
                 type="text"
                 value={data.settings?.name || ''}
                 onChange={handleNameChange}
-                className="w-full border border-slate-300 rounded-lg px-3 py-2 focus:outline-none focus:border-indigo-500"
+                className="w-full border border-slate-300 dark:border-slate-600 dark:bg-slate-700 dark:text-white rounded-lg px-3 py-2 focus:outline-none focus:border-indigo-500"
                 placeholder="Masukkan nama"
               />
             </div>
             
             <div>
-              <label className="block text-sm font-medium text-slate-700 mb-1">Status Profil</label>
+              <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">Status Profil</label>
               <select
                 value={data.settings?.profile || 'single'}
                 onChange={handleProfileChange}
-                className="w-full border border-slate-300 rounded-lg px-3 py-2 focus:outline-none focus:border-indigo-500 bg-white"
+                className="w-full border border-slate-300 dark:border-slate-600 dark:bg-slate-700 dark:text-white rounded-lg px-3 py-2 focus:outline-none focus:border-indigo-500 bg-white"
               >
                 <option value="single">Single Life</option>
                 <option value="married">Married Life</option>
@@ -116,25 +116,25 @@ export function SettingsModal({ isOpen, onClose, data, onUpdateData, onImportDat
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-slate-700 mb-1">Peringatan Anggaran (%)</label>
+              <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">Peringatan Anggaran (%)</label>
               <div className="flex items-center gap-2">
                 <input
                   type="number"
                   value={data.settings?.warningThreshold ?? 90}
                   onChange={(e) => onUpdateData({ ...data, settings: { ...data.settings, warningThreshold: Number(e.target.value) } })}
-                  className="w-24 border border-slate-300 rounded-lg px-3 py-2 focus:outline-none focus:border-indigo-500"
+                  className="w-24 border border-slate-300 dark:border-slate-600 dark:bg-slate-700 dark:text-white rounded-lg px-3 py-2 focus:outline-none focus:border-indigo-500"
                   min="0"
                   max="100"
                 />
-                <span className="text-sm text-slate-500">Set 0 untuk menonaktifkan</span>
+                <span className="text-sm text-slate-500 dark:text-slate-400">Set 0 untuk menonaktifkan</span>
               </div>
             </div>
             <div>
-              <label className="block text-sm font-medium text-slate-700 mb-1">Mata Uang</label>
+              <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">Mata Uang</label>
               <select
                 value={data.settings?.currency ?? 'IDR'}
                 onChange={(e) => onUpdateData({ ...data, settings: { ...data.settings, currency: e.target.value } })}
-                className="w-full border border-slate-300 rounded-lg px-3 py-2 focus:outline-none focus:border-indigo-500 bg-white"
+                className="w-full border border-slate-300 dark:border-slate-600 dark:bg-slate-700 dark:text-white rounded-lg px-3 py-2 focus:outline-none focus:border-indigo-500 bg-white"
               >
                 <option value="IDR">Rupiah (IDR)</option>
                 <option value="USD">US Dollar (USD)</option>
@@ -143,28 +143,40 @@ export function SettingsModal({ isOpen, onClose, data, onUpdateData, onImportDat
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-slate-700 mb-1">Tema Gelap (Dark Mode)</label>
-              <div className="flex items-center gap-2">
-                <input
-                  type="checkbox"
-                  checked={data.settings?.darkMode ?? false}
-                  onChange={(e) => onUpdateData({ ...data, settings: { ...data.settings, darkMode: e.target.checked } })}
-                  className="w-4 h-4 text-indigo-600 border-slate-300 rounded focus:ring-indigo-500"
-                />
-                <span className="text-sm text-slate-600">Aktifkan mode gelap</span>
+              <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">Tema Gelap (Dark Mode)</label>
+              <div className="flex items-center gap-3">
+                <button
+                  type="button"
+                  role="switch"
+                  aria-checked={data.settings?.darkMode ?? false}
+                  onClick={() => onUpdateData({ ...data, settings: { ...data.settings, darkMode: !(data.settings?.darkMode ?? false) } })}
+                  className={`relative inline-flex h-6 w-11 shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-indigo-600 focus:ring-offset-2 ${
+                    data.settings?.darkMode ? 'bg-indigo-600' : 'bg-slate-200'
+                  }`}
+                >
+                  <span
+                    aria-hidden="true"
+                    className={`pointer-events-none inline-block h-5 w-5 transform rounded-full bg-white shadow ring-0 transition duration-200 ease-in-out ${
+                      data.settings?.darkMode ? 'translate-x-5' : 'translate-x-0'
+                    }`}
+                  />
+                </button>
+                <span className="text-sm text-slate-600 dark:text-slate-400">
+                  {data.settings?.darkMode ? 'Aktif' : 'Nonaktif'}
+                </span>
               </div>
             </div>
           </div>
 
-          <hr className="border-slate-100" />
+          <hr className="border-slate-100 dark:border-slate-700" />
 
           <div className="space-y-4">
-            <h3 className="text-sm font-bold text-slate-400 uppercase tracking-wider">Manajemen Template & Data</h3>
+            <h3 className="text-sm font-bold text-slate-400 dark:text-slate-500 uppercase tracking-wider">Manajemen Template & Data</h3>
             
             <div className="grid grid-cols-2 gap-3">
               <button
                 onClick={handleExportTemplate}
-                className="flex items-center justify-center gap-2 px-3 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-lg text-sm font-medium transition-colors"
+                className="flex items-center justify-center gap-2 px-3 py-2 bg-slate-100 dark:bg-slate-700 hover:bg-slate-200 dark:hover:bg-slate-600 text-slate-700 dark:text-slate-300 rounded-lg text-sm font-medium transition-colors"
               >
                 <FileText size={16} />
                 Simpan Template
@@ -172,7 +184,7 @@ export function SettingsModal({ isOpen, onClose, data, onUpdateData, onImportDat
               
               <button
                 onClick={() => templateInputRef.current?.click()}
-                className="flex items-center justify-center gap-2 px-3 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-lg text-sm font-medium transition-colors"
+                className="flex items-center justify-center gap-2 px-3 py-2 bg-slate-100 dark:bg-slate-700 hover:bg-slate-200 dark:hover:bg-slate-600 text-slate-700 dark:text-slate-300 rounded-lg text-sm font-medium transition-colors"
               >
                 <Upload size={16} />
                 Muat Template File
@@ -197,7 +209,7 @@ export function SettingsModal({ isOpen, onClose, data, onUpdateData, onImportDat
                     alert('Template berhasil dikembalikan ke default!');
                   }
                 }}
-                className="col-span-2 flex items-center justify-center gap-2 px-3 py-2 bg-rose-50 hover:bg-rose-100 text-rose-700 rounded-lg text-sm font-medium transition-colors"
+                className="col-span-2 flex items-center justify-center gap-2 px-3 py-2 bg-rose-50 dark:bg-rose-900/30 hover:bg-rose-100 dark:hover:bg-rose-900/50 text-rose-700 dark:text-rose-400 rounded-lg text-sm font-medium transition-colors"
               >
                 <RotateCcw size={16} />
                 Restore Default Template
@@ -205,7 +217,7 @@ export function SettingsModal({ isOpen, onClose, data, onUpdateData, onImportDat
 
               <button
                 onClick={() => exportToJson(data, 'data-becebudgeting')}
-                className="flex items-center justify-center gap-2 px-3 py-2 bg-indigo-50 hover:bg-indigo-100 text-indigo-700 rounded-lg text-sm font-medium transition-colors"
+                className="flex items-center justify-center gap-2 px-3 py-2 bg-indigo-50 dark:bg-indigo-900/30 hover:bg-indigo-100 dark:hover:bg-indigo-900/50 text-indigo-700 dark:text-indigo-400 rounded-lg text-sm font-medium transition-colors"
               >
                 <Download size={16} />
                 Export Data
@@ -213,7 +225,7 @@ export function SettingsModal({ isOpen, onClose, data, onUpdateData, onImportDat
               
               <button
                 onClick={() => fileInputRef.current?.click()}
-                className="flex items-center justify-center gap-2 px-3 py-2 bg-indigo-50 hover:bg-indigo-100 text-indigo-700 rounded-lg text-sm font-medium transition-colors"
+                className="flex items-center justify-center gap-2 px-3 py-2 bg-indigo-50 dark:bg-indigo-900/30 hover:bg-indigo-100 dark:hover:bg-indigo-900/50 text-indigo-700 dark:text-indigo-400 rounded-lg text-sm font-medium transition-colors"
               >
                 <Upload size={16} />
                 Import Data

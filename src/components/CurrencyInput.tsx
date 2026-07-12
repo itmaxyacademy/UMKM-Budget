@@ -11,11 +11,18 @@ interface CurrencyInputProps {
 
 export function CurrencyInput({ value, onChange, currencyCode, className, placeholder }: CurrencyInputProps) {
   const [isFocused, setIsFocused] = useState(false);
-  const [localValue, setLocalValue] = useState(value.toString());
+
+  const formatWithDelimiters = (val: string) => {
+    const numericStr = val.replace(/[^0-9]/g, '');
+    if (!numericStr) return '';
+    return Number(numericStr).toLocaleString('id-ID');
+  };
+
+  const [localValue, setLocalValue] = useState(formatWithDelimiters(value.toString()));
 
   useEffect(() => {
     if (!isFocused) {
-      setLocalValue(value.toString());
+      setLocalValue(formatWithDelimiters(value.toString()));
     }
   }, [value, isFocused]);
 
@@ -23,8 +30,9 @@ export function CurrencyInput({ value, onChange, currencyCode, className, placeh
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const rawValue = e.target.value;
-    setLocalValue(rawValue);
-    const numericValue = Number(rawValue.replace(/[^0-9.-]+/g, ''));
+    const numericStr = rawValue.replace(/[^0-9]/g, '');
+    setLocalValue(formatWithDelimiters(numericStr));
+    const numericValue = Number(numericStr);
     if (!isNaN(numericValue)) {
       onChange(numericValue);
     }
@@ -32,13 +40,14 @@ export function CurrencyInput({ value, onChange, currencyCode, className, placeh
 
   return (
     <input
-      type={isFocused ? 'number' : 'text'}
+      type="text"
       value={displayValue === formatCurrency(0, currencyCode) && !isFocused && value === 0 ? '' : displayValue}
       onChange={handleChange}
       onFocus={() => setIsFocused(true)}
       onBlur={() => {
         setIsFocused(false);
-        const numericValue = Number(localValue.replace(/[^0-9.-]+/g, ''));
+        const numericStr = localValue.replace(/[^0-9]/g, '');
+        const numericValue = Number(numericStr);
         onChange(isNaN(numericValue) ? 0 : numericValue);
       }}
       className={className}

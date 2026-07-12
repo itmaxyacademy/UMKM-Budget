@@ -70,100 +70,144 @@ export const calculateTotals = (data: BudgetData, mode: 'plan' | 'realization') 
 export const exportToPdf = async (data: BudgetData, mode: 'plan' | 'realization') => {
   const doc = new jsPDF();
   const title = `Executive Budget Report - ${mode === 'plan' ? 'Plan' : 'Realization'}`;
-  const dateStr = new Date().toLocaleDateString('id-ID');
+  const dateStr = new Date().toLocaleDateString('id-ID', { year: 'numeric', month: 'long', day: 'numeric' });
+  const timeStr = new Date().toLocaleTimeString('id-ID');
   
-  // Header
-  doc.setFontSize(20);
-  doc.setTextColor(40, 40, 40);
-  doc.text('UMKM Budget Pro', 14, 22);
+  // Header Branding Block
+  doc.setFillColor(30, 41, 59); // slate-800
+  doc.rect(0, 0, doc.internal.pageSize.getWidth(), 50, 'F');
+  
+  doc.setFontSize(22);
+  doc.setTextColor(255, 255, 255);
+  doc.setFont('helvetica', 'bold');
+  doc.text('UMKM Budget Pro', 14, 25);
   
   doc.setFontSize(14);
-  doc.text(title, 14, 32);
+  doc.setFont('helvetica', 'normal');
+  doc.setTextColor(203, 213, 225); // slate-300
+  doc.text(title, 14, 35);
   
   doc.setFontSize(10);
-  doc.setTextColor(100, 100, 100);
-  doc.text(`Generated on: ${dateStr}`, 14, 40);
+  doc.text(`Generated on: ${dateStr} ${timeStr}`, doc.internal.pageSize.getWidth() - 14, 25, { align: 'right' });
   if (data.settings?.name) {
-    doc.text(`Prepared for: ${data.settings.name}`, 14, 46);
+    doc.text(`Prepared for: ${data.settings.name}`, doc.internal.pageSize.getWidth() - 14, 35, { align: 'right' });
   }
 
   // Calculate Totals
   const totals = calculateTotals(data, mode);
 
   // Summary Table
-  doc.setFontSize(12);
-  doc.setTextColor(40, 40, 40);
-  doc.text('Summary', 14, 60);
+  doc.setFontSize(16);
+  doc.setTextColor(30, 41, 59);
+  doc.setFont('helvetica', 'bold');
+  doc.text('Financial Summary', 14, 65);
   
   autoTable(doc, {
-    startY: 65,
-    head: [['Description', 'Amount']],
+    startY: 70,
+    head: [['Metric', 'Value']],
     body: [
-      ['Total Income', formatCurrency(totals.income, data.settings.currency)],
-      ['Total Expense', formatCurrency(totals.expenses, data.settings.currency)],
-      ['Net Balance', formatCurrency(totals.surplus, data.settings.currency)],
-      ['Recurring Cost / Month', formatCurrency(totals.recurringCostMonth, data.settings.currency)],
-      ['Recurring Cost / Year', formatCurrency(totals.recurringCostYear, data.settings.currency)],
+      ['Total Monthly Income', formatCurrency(totals.income, data.settings.currency)],
+      ['Cost of Living (COL) / Expenses', formatCurrency(totals.expenses, data.settings.currency)],
+      ['Net Balance (Surplus/Deficit)', formatCurrency(totals.surplus, data.settings.currency)],
+      ['Recurring Cost (Monthly)', formatCurrency(totals.recurringCostMonth, data.settings.currency)],
+      ['Recurring Cost (Annual)', formatCurrency(totals.recurringCostYear, data.settings.currency)],
     ],
     theme: 'grid',
-    headStyles: { fillColor: [250, 183, 0] }, // Amber color (#fab700)
-    styles: { fontSize: 10 }
+    headStyles: { fillColor: [71, 85, 105], textColor: [255, 255, 255], fontStyle: 'bold' }, // slate-600
+    styles: { fontSize: 11, cellPadding: 5 },
+    columnStyles: {
+      0: { fontStyle: 'bold', textColor: [51, 65, 85] },
+      1: { halign: 'right' }
+    },
+    alternateRowStyles: { fillColor: [248, 250, 252] } // slate-50
   });
 
   let finalY = (doc as any).lastAutoTable.finalY + 15;
 
-  // Try to add charts if they exist in the DOM
+  // Visual Representations (Charts from DOM)
   try {
     const svgElements = document.querySelectorAll('.recharts-surface');
     if (svgElements && svgElements.length > 0) {
-      // First chart (Gauge)
-      const svg1 = svgElements[0] as SVGSVGElement;
-      const xml1 = new XMLSerializer().serializeToString(svg1);
-      let formattedXml1 = xml1;
-      if (!formattedXml1.includes('xmlns=')) formattedXml1 = formattedXml1.replace('<svg ', '<svg xmlns="http://www.w3.org/2000/svg" ');
+      if (finalY + 100 > doc.internal.pageSize.getHeight()) {
+        doc.addPage();
+        finalY = 20;
+      }
       
-      const img1 = new Image();
-      img1.src = 'data:image/svg+xml;base64,' + btoa(unescape(encodeURIComponent(formattedXml1)));
-      
-      await new Promise((resolve) => {
-        img1.onload = resolve;
-        img1.onerror = resolve;
-      });
-      
-      if (img1.width > 0) {
-        const canvas1 = document.createElement('canvas');
-        canvas1.width = svg1.clientWidth || 300;
-        canvas1.height = svg1.clientHeight || 300;
-        const ctx1 = canvas1.getContext('2d');
-        if (ctx1) {
-          ctx1.fillStyle = '#ffffff';
-          ctx1.fillRect(0, 0, canvas1.width, canvas1.height);
-          ctx1.drawImage(img1, 0, 0, canvas1.width, canvas1.height);
-          
-          if (finalY + 80 > doc.internal.pageSize.getHeight()) {
-            doc.addPage();
-            finalY = 20;
+      doc.setFontSize(16);
+      doc.setTextColor(30, 41, 59);
+      doc.setFont('helvetica', 'bold');
+      doc.text('Visual Analysis', 14, finalY);
+      finalY += 10;
+
+      let currentX = 14;
+      let rowHeight = 0;
+
+      for (let i = 0; i < Math.min(svgElements.length, 3); i++) {
+        const svg = svgElements[i] as SVGSVGElement;
+        const xml = new XMLSerializer().serializeToString(svg);
+        let formattedXml = xml;
+        if (!formattedXml.includes('xmlns=')) formattedXml = formattedXml.replace('<svg ', '<svg xmlns="http://www.w3.org/2000/svg" ');
+        
+        const img = new Image();
+        img.src = 'data:image/svg+xml;base64,' + btoa(unescape(encodeURIComponent(formattedXml)));
+        
+        await new Promise((resolve) => {
+          img.onload = resolve;
+          img.onerror = resolve;
+        });
+        
+        if (img.width > 0) {
+          const canvas = document.createElement('canvas');
+          canvas.width = svg.clientWidth || 300;
+          canvas.height = svg.clientHeight || 300;
+          const ctx = canvas.getContext('2d');
+          if (ctx) {
+            ctx.fillStyle = '#ffffff';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+            ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+            
+            const targetWidth = 85; // Roughly half page width minus margins
+            const targetHeight = (canvas.height * targetWidth) / canvas.width;
+            
+            if (currentX + targetWidth > doc.internal.pageSize.getWidth()) {
+              currentX = 14;
+              finalY += rowHeight + 10;
+              rowHeight = 0;
+              
+              if (finalY + targetHeight > doc.internal.pageSize.getHeight() - 20) {
+                doc.addPage();
+                finalY = 20;
+              }
+            }
+
+            doc.addImage(canvas.toDataURL('image/png'), 'PNG', currentX, finalY, targetWidth, targetHeight);
+            currentX += targetWidth + 10;
+            rowHeight = Math.max(rowHeight, targetHeight);
           }
-          
-          doc.text('Charts Summary', 14, finalY);
-          const ratio = (canvas1.height * 80) / canvas1.width;
-          doc.addImage(canvas1.toDataURL('image/png'), 'PNG', 14, finalY + 5, 80, ratio);
-          finalY += ratio + 20;
         }
       }
+      finalY += rowHeight + 15;
     }
   } catch (e) {
     console.warn("Could not export charts to PDF", e);
   }
 
+  // Details Section Header
   if (finalY > doc.internal.pageSize.getHeight() - 40) {
     doc.addPage();
     finalY = 20;
   }
+  
+  doc.setFontSize(18);
+  doc.setTextColor(30, 41, 59);
+  doc.setFont('helvetica', 'bold');
+  doc.text('Detailed Breakdowns', 14, finalY);
+  finalY += 15;
 
   // Income Breakdown
-  doc.setFontSize(12);
-  doc.text('Income Breakdown', 14, finalY);
+  doc.setFontSize(14);
+  doc.setTextColor(15, 23, 42);
+  doc.text('Income Details', 14, finalY);
   
   const incomeRows: any[] = [];
   data.incomes.forEach(g => {
@@ -174,18 +218,20 @@ export const exportToPdf = async (data: BudgetData, mode: 'plan' | 'realization'
 
   autoTable(doc, {
     startY: finalY + 5,
-    head: [['Group', 'Item', 'Amount']],
+    head: [['Income Group', 'Item', 'Amount']],
     body: incomeRows,
     theme: 'striped',
-    headStyles: { fillColor: [79, 70, 229] }, // Indigo
-    styles: { fontSize: 9 }
+    headStyles: { fillColor: [99, 102, 241] }, // indigo-500
+    styles: { fontSize: 10 },
+    columnStyles: { 2: { halign: 'right' } }
   });
 
   finalY = (doc as any).lastAutoTable.finalY + 15;
 
-  // Expense Breakdown (Divide by category)
+  // Expense Breakdown
   doc.setFontSize(14);
-  doc.text('Expense Breakdown', 14, finalY);
+  doc.setTextColor(15, 23, 42);
+  doc.text('Expense Details by Category', 14, finalY);
   finalY += 10;
 
   data.expenses.forEach(category => {
@@ -195,33 +241,51 @@ export const exportToPdf = async (data: BudgetData, mode: 'plan' | 'realization'
     }
     
     doc.setFontSize(12);
-    doc.setTextColor(225, 29, 72); // Rose
-    doc.text(category.name, 14, finalY);
+    doc.setFont('helvetica', 'bold');
+    doc.setTextColor(225, 29, 72); // rose-600
+    doc.text(`${category.name} (Target: ${category.targetPercentage}%)`, 14, finalY);
     
     const categoryRows: any[] = [];
+    let catTotal = 0;
     category.subcategories.forEach(s => {
       s.items.forEach(i => {
-        categoryRows.push([s.name, i.name, formatCurrency((mode === 'plan' ? i.planned : i.actual) * i.duration, data.settings.currency)]);
+        const val = (mode === 'plan' ? i.planned : i.actual) * i.duration;
+        catTotal += val;
+        categoryRows.push([s.name, i.name, formatCurrency(val, data.settings.currency)]);
       });
     });
     
     if (categoryRows.length > 0) {
+      // Add a total row
+      categoryRows.push([{ content: 'Total', colSpan: 2, styles: { halign: 'right', fontStyle: 'bold' } }, { content: formatCurrency(catTotal, data.settings.currency), styles: { fontStyle: 'bold' } }]);
+      
       autoTable(doc, {
         startY: finalY + 5,
         head: [['Subcategory', 'Item', 'Amount']],
         body: categoryRows,
         theme: 'striped',
-        headStyles: { fillColor: [244, 63, 94] },
-        styles: { fontSize: 9 }
+        headStyles: { fillColor: [244, 63, 94] }, // rose-500
+        styles: { fontSize: 10 },
+        columnStyles: { 2: { halign: 'right' } }
       });
       finalY = (doc as any).lastAutoTable.finalY + 15;
     } else {
       doc.setFontSize(10);
+      doc.setFont('helvetica', 'italic');
       doc.setTextColor(100, 100, 100);
       doc.text("No items.", 14, finalY + 5);
       finalY += 15;
     }
   });
+  
+  // Footer page numbers
+  const pageCount = doc.internal.getNumberOfPages();
+  doc.setFontSize(9);
+  doc.setTextColor(150, 150, 150);
+  for(let i = 1; i <= pageCount; i++) {
+    doc.setPage(i);
+    doc.text(`Page ${i} of ${pageCount}`, doc.internal.pageSize.getWidth() / 2, doc.internal.pageSize.getHeight() - 10, { align: 'center' });
+  }
 
   doc.save(`budget-${mode}-${new Date().toISOString().split('T')[0]}.pdf`);
 };

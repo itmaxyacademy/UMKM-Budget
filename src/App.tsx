@@ -13,7 +13,7 @@ import { SettingsModal } from './components/SettingsModal';
 import { exportToJson, exportToPdf, exportToCsv, exportToXls } from './utils';
 import { FileText, Calculator, Settings, Save, Upload } from 'lucide-react';
 
-import { CompareView } from './components/CompareView';
+import { MoreFeatures } from './components/MoreFeatures';
 import { OnboardingModal } from './components/OnboardingModal';
 
 export default function App() {
@@ -38,7 +38,7 @@ export default function App() {
     return defaultBudgetData;
   });
 
-  const [activeTab, setActiveTab] = useState<'plan' | 'realization'>('plan');
+  const [activeTab, setActiveTab] = useState<'plan' | 'realization' | 'more'>('plan');
   const [isSettingsOpen, setIsSettingsOpen] = useState(false);
   const [showOnboarding, setShowOnboarding] = useState(() => !localStorage.getItem('budget_data_onboarded'));
 
@@ -148,11 +148,11 @@ export default function App() {
               <div className="w-8 h-8 bg-indigo-600 rounded-lg flex items-center justify-center">
                 <Calculator size={20} className="text-white" />
               </div>
-              <h1 className="text-lg md:text-xl font-bold text-slate-900 tracking-tight">UMKM Budget <span className="text-indigo-600 font-medium">Pro</span></h1>
+              <h1 className="text-lg md:text-xl font-bold text-slate-900 dark:text-slate-100 tracking-tight">UMKM Budget <span className="text-indigo-600 font-medium">Pro</span></h1>
             </div>
             <button
               onClick={() => setIsSettingsOpen(true)}
-              className="md:hidden flex items-center justify-center w-9 h-9 text-slate-600 bg-white border border-slate-200 rounded-lg hover:bg-slate-50 transition-colors shadow-sm"
+              className="md:hidden flex items-center justify-center w-9 h-9 text-slate-600 dark:text-slate-300 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg hover:bg-slate-50 dark:hover:bg-slate-700 transition-colors shadow-sm"
               title="Pengaturan"
             >
               <Settings size={18} />
@@ -160,32 +160,32 @@ export default function App() {
           </div>
           
           <div className="flex items-center gap-2 md:gap-4 w-full md:w-auto justify-between md:justify-end">
-            <div className="flex bg-slate-100 p-1 rounded-lg border border-slate-200 w-full md:w-auto">
+            <div className="flex bg-slate-100 dark:bg-slate-700 p-1 rounded-lg border border-slate-200 dark:border-slate-600 w-full md:w-auto">
               <button 
                 onClick={() => setActiveTab('plan')}
-                className={`flex-1 md:flex-none px-2 md:px-3 py-1.5 text-xs font-semibold rounded ${activeTab === 'plan' ? 'bg-white shadow-sm text-slate-900' : 'text-slate-500'}`}
+                className={`flex-1 md:flex-none px-2 md:px-3 py-1.5 text-xs font-semibold rounded ${activeTab === 'plan' ? 'bg-white dark:bg-slate-800 shadow-sm text-slate-900 dark:text-slate-100' : 'text-slate-500 dark:text-slate-400'}`}
               >
                 Plan
               </button>
               <button 
                 onClick={() => setActiveTab('realization')}
-                className={`flex-1 md:flex-none px-2 md:px-3 py-1.5 text-xs font-semibold rounded ${activeTab === 'realization' ? 'bg-white shadow-sm text-slate-900' : 'text-slate-500'}`}
+                className={`flex-1 md:flex-none px-2 md:px-3 py-1.5 text-xs font-semibold rounded ${activeTab === 'realization' ? 'bg-white dark:bg-slate-800 shadow-sm text-slate-900 dark:text-slate-100' : 'text-slate-500 dark:text-slate-400'}`}
               >
                 Realisasi
               </button>
               <button 
-                onClick={() => setActiveTab('compare')}
-                className={`flex-1 md:flex-none px-2 md:px-3 py-1.5 text-xs font-semibold rounded ${activeTab === 'compare' ? 'bg-white shadow-sm text-slate-900' : 'text-slate-500'}`}
+                onClick={() => setActiveTab('more')}
+                className={`flex-1 md:flex-none px-2 md:px-3 py-1.5 text-xs font-semibold rounded ${activeTab === 'more' ? 'bg-white dark:bg-slate-800 shadow-sm text-slate-900 dark:text-slate-100' : 'text-slate-500 dark:text-slate-400'}`}
               >
-                Komparasi
+                Fitur Lainnya
               </button>
             </div>
             
-            <div className="hidden md:block h-6 w-px bg-slate-200 mx-2"></div>
+            <div className="hidden md:block h-6 w-px bg-slate-200 dark:bg-slate-700 mx-2"></div>
             
             <button
               onClick={() => setIsSettingsOpen(true)}
-              className="hidden md:flex items-center gap-2 px-4 py-2 text-sm font-medium text-slate-600 bg-white border border-slate-200 rounded-lg hover:bg-slate-50 transition-colors shadow-sm shrink-0"
+              className="hidden md:flex items-center gap-2 px-4 py-2 text-sm font-medium text-slate-600 dark:text-slate-300 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg hover:bg-slate-50 dark:hover:bg-slate-700 transition-colors shadow-sm shrink-0"
               title="Pengaturan"
             >
               <Settings size={16} />
@@ -291,13 +291,13 @@ export default function App() {
 
         {activeTab === 'realization' && (
           <div ref={reportRef} className="bg-transparent print:bg-white flex-1 flex flex-col gap-6">
-            <div className="print:hidden shrink-0 bg-white p-4 rounded-xl border border-slate-200 shadow-sm flex flex-col md:flex-row items-center justify-between gap-4 mb-2">
+            <div className="print:hidden shrink-0 bg-white dark:bg-slate-800 p-4 rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm flex flex-col md:flex-row items-center justify-between gap-4 mb-2">
               <div className="flex items-center gap-4">
-                <span className="text-sm font-semibold text-slate-500 uppercase tracking-wider hidden md:inline">Periode Realisasi:</span>
+                <span className="text-sm font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider hidden md:inline">Periode Realisasi:</span>
                 <select
                   value={data.settings.realizationMonth || new Date().getMonth() + 1}
                   onChange={(e) => setData({ ...data, settings: { ...data.settings, realizationMonth: Number(e.target.value) } })}
-                  className="bg-slate-50 border border-slate-200 rounded-lg px-2 md:px-4 py-2 text-sm font-semibold text-slate-800 focus:outline-none focus:border-indigo-500"
+                  className="bg-slate-50 dark:bg-slate-700 border border-slate-200 dark:border-slate-600 rounded-lg px-2 md:px-4 py-2 text-sm font-semibold text-slate-800 dark:text-white focus:outline-none focus:border-indigo-500"
                 >
                   <option value={1}>Januari</option>
                   <option value={2}>Februari</option>
@@ -316,20 +316,20 @@ export default function App() {
                   type="number"
                   value={data.settings.realizationYear || new Date().getFullYear()}
                   onChange={(e) => setData({ ...data, settings: { ...data.settings, realizationYear: Number(e.target.value) } })}
-                  className="bg-slate-50 border border-slate-200 rounded-lg px-2 md:px-4 py-2 text-sm font-semibold text-slate-800 focus:outline-none focus:border-indigo-500 w-20 md:w-24"
+                  className="bg-slate-50 dark:bg-slate-700 border border-slate-200 dark:border-slate-600 rounded-lg px-2 md:px-4 py-2 text-sm font-semibold text-slate-800 dark:text-white focus:outline-none focus:border-indigo-500 w-20 md:w-24"
                 />
               </div>
               <div className="flex items-center gap-2 w-full md:w-auto justify-end">
                 <button
                   onClick={handleSaveRealization}
-                  className="flex-1 md:flex-none flex items-center justify-center gap-2 px-4 py-2 text-sm font-medium text-slate-600 bg-slate-100 border border-transparent rounded-lg hover:bg-slate-200 transition-colors shadow-sm"
+                  className="flex-1 md:flex-none flex items-center justify-center gap-2 px-4 py-2 text-sm font-medium text-slate-600 dark:text-slate-300 bg-slate-100 dark:bg-slate-700 border border-transparent rounded-lg hover:bg-slate-200 dark:hover:bg-slate-600 transition-colors shadow-sm"
                 >
                   <Save size={16} />
                   <span>Simpan</span>
                 </button>
                 <button
                   onClick={() => realizationInputRef.current?.click()}
-                  className="flex-1 md:flex-none flex items-center justify-center gap-2 px-4 py-2 text-sm font-medium text-indigo-600 bg-indigo-50 border border-indigo-100 rounded-lg hover:bg-indigo-100 transition-colors shadow-sm"
+                  className="flex-1 md:flex-none flex items-center justify-center gap-2 px-4 py-2 text-sm font-medium text-indigo-600 dark:text-indigo-400 bg-indigo-50 dark:bg-indigo-900/30 border border-indigo-100 dark:border-indigo-800 rounded-lg hover:bg-indigo-100 dark:hover:bg-indigo-900/50 transition-colors shadow-sm"
                 >
                   <Upload size={16} />
                   <span>Muat</span>
@@ -374,8 +374,8 @@ export default function App() {
           </div>
         )}
 
-        {activeTab === 'compare' && (
-          <CompareView data={data} />
+        {activeTab === 'more' && (
+          <MoreFeatures data={data} />
         )}
       </main>
     </div>
