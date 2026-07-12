@@ -1,0 +1,489 @@
+{
+  "settings": {
+    "name": "Toro",
+    "profile": "single",
+    "realizationMonth": 7,
+    "darkMode": false
+  },
+  "incomes": [
+    {
+      "id": "cc0dfd11-e150-47c5-9292-400ff4921d6c",
+      "name": "Pendapatan",
+      "items": [
+        {
+          "id": "1d595dea-e774-4696-9bff-1adc06173148",
+          "name": "Gaji",
+          "planned": 25000000,
+          "actual": 0,
+          "duration": 1
+        },
+        {
+          "id": "b1f52234-da45-42e6-a39d-933ff82c1c84",
+          "name": "Bonus",
+          "planned": 25000000,
+          "actual": 0,
+          "duration": 12
+        },
+        {
+          "id": "f194eeda-a5e7-4d78-bfe8-d2e6598d1b74",
+          "name": "Self-Employment Income",
+          "planned": 0,
+          "actual": 0,
+          "duration": 1
+        },
+        {
+          "id": "51c2be18-2116-4a7f-8852-3979913d967f",
+          "name": "Business Income",
+          "planned": 0,
+          "actual": 0,
+          "duration": 1
+        },
+        {
+          "id": "f3b0275b-75bf-4d24-918a-a793c6391c74",
+          "name": "Hasil Investasi",
+          "planned": 0,
+          "actual": 0,
+          "duration": 1
+        },
+        {
+          "id": "21ffc221-6732-4552-a668-260e18010485",
+          "name": "Other Income",
+          "planned": 0,
+          "actual": 0,
+          "duration": 1
+        }
+      ]
+    }
+  ],
+  "expenses": [
+    {
+      "id": "dd93c3f2-a22c-4926-92fa-63e4a31b4bb5",
+      "name": "Kebutuhan Umum",
+      "targetPercentage": 40,
+      "subcategories": [
+        {
+          "id": "e8061189-8c4f-4792-b3f8-a4c9eddad635",
+          "name": "Rumah",
+          "items": [
+            {
+              "id": "60222270-186b-454e-9913-7824d2b1ecb0",
+              "name": "Sewa Rumah/Kost",
+              "planned": 0,
+              "actual": 0,
+              "duration": 1
+            },
+            {
+              "id": "2fcb47f0-c7af-46e9-a0d8-c27632a50486",
+              "name": "Service Rumah (AC, dll)",
+              "planned": 0,
+              "actual": 0,
+              "duration": 1
+            },
+            {
+              "id": "c5a20dff-ab17-4518-bc28-3c44553d31ab",
+              "name": "Perwatan Rumah",
+              "planned": 0,
+              "actual": 0,
+              "duration": 1
+            }
+          ]
+        },
+        {
+          "id": "6c181f31-2193-4c28-8a33-98e55c060b81",
+          "name": "Utilitas",
+          "items": [
+            {
+              "id": "90a33745-7a46-46b6-865a-2daed874852b",
+              "name": "Pulsa dan Paket Data",
+              "planned": 0,
+              "actual": 0,
+              "duration": 1
+            },
+            {
+              "id": "cd2c451d-d090-4af7-abc1-fbb039be3296",
+              "name": "Internet, WiFi & Telepon",
+              "planned": 0,
+              "actual": 0,
+              "duration": 1
+            },
+            {
+              "id": "be96a29d-829e-45e0-a621-b58ad4a16bdc",
+              "name": "Gas/LPG",
+              "planned": 0,
+              "actual": 0,
+              "duration": 1
+            },
+            {
+              "id": "5401d498-a811-43c5-a30e-a93babceb9dd",
+              "name": "Listrik",
+              "planned": 0,
+              "actual": 0,
+              "duration": 1
+            },
+            {
+              "id": "c879662a-db62-49a5-b7a6-c2855ec04bcf",
+              "name": "Air",
+              "planned": 0,
+              "actual": 0,
+              "duration": 1
+            },
+            {
+              "id": "ae04c529-2fdd-4d5d-9795-0778b996005a",
+              "name": "Iuran Rumah & Lingkungan",
+              "planned": 0,
+              "actual": 0,
+              "duration": 1
+            },
+            {
+              "id": "88978805-a22a-4439-acbf-d3bef2041e08",
+              "name": "Laundry",
+              "planned": 0,
+              "actual": 0,
+              "duration": 1
+            }
+          ]
+        },
+        {
+          "id": "08156809-8485-4790-80a4-fc7c429c5b83",
+          "name": "Makanan & Self-Care",
+          "items": [
+            {
+              "id": "d98e3208-fa01-46a8-97c6-9b4f3fc83b2d",
+              "name": "Belanja Dapur",
+              "planned": 0,
+              "actual": 0,
+              "duration": 1
+            },
+            {
+              "id": "f876a462-21d6-43ed-abad-6a9818c09a70",
+              "name": "Makanan Jadi (Delivery)",
+              "planned": 0,
+              "actual": 0,
+              "duration": 1
+            },
+            {
+              "id": "17dd933e-918b-4f9c-8a6b-297389eb2dec",
+              "name": "Makan di Luar (Dine-Out)",
+              "planned": 0,
+              "actual": 0,
+              "duration": 1
+            },
+            {
+              "id": "9ff64734-dc4a-4b60-ac7d-62dbfc633015",
+              "name": "Belanja Bulanan",
+              "planned": 0,
+              "actual": 0,
+              "duration": 1
+            }
+          ]
+        },
+        {
+          "id": "f38bf7f2-1b84-430a-bd92-f5e181d149ca",
+          "name": "Anak",
+          "items": [
+            {
+              "id": "1a0afdaf-f2de-4f85-90de-e705e3d613b8",
+              "name": "Pendidikan Anak",
+              "planned": 0,
+              "actual": 0,
+              "duration": 1
+            },
+            {
+              "id": "06323e84-66e7-49c9-b9b8-4467daa3790d",
+              "name": "Perlengkapan Sekolah",
+              "planned": 0,
+              "actual": 0,
+              "duration": 1
+            },
+            {
+              "id": "3a7c11ee-5538-41ab-8d2f-5c065ba49a39",
+              "name": "Les/Kursus",
+              "planned": 0,
+              "actual": 0,
+              "duration": 1
+            },
+            {
+              "id": "6f78084c-1500-4e1d-82d5-e4372e4bf613",
+              "name": "Uang Saku Anak",
+              "planned": 0,
+              "actual": 0,
+              "duration": 1
+            },
+            {
+              "id": "fba4d2e6-5ade-44ee-8982-b63f21f0df7e",
+              "name": "Uang Mainan Anak",
+              "planned": 0,
+              "actual": 0,
+              "duration": 1
+            }
+          ]
+        },
+        {
+          "id": "ad4aa60e-f599-475d-b55e-5944e5a13b20",
+          "name": "Hiburan",
+          "items": [
+            {
+              "id": "3e4cbf6a-050c-4184-ad08-18a7817cb0b5",
+              "name": "Hobby",
+              "planned": 0,
+              "actual": 0,
+              "duration": 1
+            },
+            {
+              "id": "11562baf-4339-4a74-84e8-32b583141caf",
+              "name": "Jalan-Jalan, Rekreasi & LIburan",
+              "planned": 0,
+              "actual": 0,
+              "duration": 1
+            },
+            {
+              "id": "18998b8f-410a-442d-87b4-263b7e0f301b",
+              "name": "Streaming (Netflix, Spotify, dll)",
+              "planned": 0,
+              "actual": 0,
+              "duration": 1
+            }
+          ]
+        },
+        {
+          "id": "f4e8f3a3-ca1c-49ce-b96a-a9556ed3df0e",
+          "name": "Kesehatan",
+          "items": [
+            {
+              "id": "d12c2c9e-a2fd-4891-861e-655439e5f88a",
+              "name": "Asuransi Kesehatan",
+              "planned": 0,
+              "actual": 0,
+              "duration": 1
+            },
+            {
+              "id": "28ae5db8-fdd1-47c4-b510-1c2477fd740f",
+              "name": "Biaya Dokter",
+              "planned": 0,
+              "actual": 0,
+              "duration": 1
+            },
+            {
+              "id": "1470640a-be8c-4f03-97ee-1a5f8da83d9a",
+              "name": "Obat",
+              "planned": 0,
+              "actual": 0,
+              "duration": 1
+            },
+            {
+              "id": "5a1b8498-d8e0-42d5-9fb0-0951a2900334",
+              "name": "Fitness dan Olah Raga",
+              "planned": 0,
+              "actual": 0,
+              "duration": 1
+            }
+          ]
+        },
+        {
+          "id": "3340270d-9c39-4aed-81dd-9cb2e2d783d2",
+          "name": "Transportasi",
+          "items": [
+            {
+              "id": "952212ed-1f36-453f-bfb3-d726d8a5f5f1",
+              "name": "Asuransi Kendaraan",
+              "planned": 0,
+              "actual": 0,
+              "duration": 1
+            },
+            {
+              "id": "9858c010-a13b-44b8-8ba8-bafa9b39873a",
+              "name": "BBM",
+              "planned": 0,
+              "actual": 0,
+              "duration": 1
+            },
+            {
+              "id": "e9b666b6-81e5-4988-90a9-47bbf11470ba",
+              "name": "Tol",
+              "planned": 0,
+              "actual": 0,
+              "duration": 1
+            },
+            {
+              "id": "2fbbb135-82b7-43b0-964e-cdd5723c1384",
+              "name": "Parkir",
+              "planned": 0,
+              "actual": 0,
+              "duration": 1
+            },
+            {
+              "id": "eee73590-e944-4e4e-b682-5069a965151c",
+              "name": "Supir",
+              "planned": 0,
+              "actual": 0,
+              "duration": 1
+            },
+            {
+              "id": "acb3f6d5-cee9-46ec-8f06-6b24abf7c6bb",
+              "name": "Perawatan Mobil",
+              "planned": 0,
+              "actual": 0,
+              "duration": 1
+            },
+            {
+              "id": "f43d717f-1b2a-412f-b6c3-ef9da186118b",
+              "name": "Transportasi Umum",
+              "planned": 0,
+              "actual": 0,
+              "duration": 1
+            }
+          ]
+        },
+        {
+          "id": "b1f7dca4-4369-4ce0-ab9e-b68e8f1cb1e8",
+          "name": "Shopping",
+          "items": [
+            {
+              "id": "4fb6c51c-6356-4443-8cea-87a496facf2f",
+              "name": "Baju",
+              "planned": 0,
+              "actual": 0,
+              "duration": 1
+            },
+            {
+              "id": "e660157a-b1f2-428a-b95b-9da50eee7282",
+              "name": "Elektronik",
+              "planned": 0,
+              "actual": 0,
+              "duration": 1
+            },
+            {
+              "id": "9083cb1d-1358-40df-bb8e-eeb88518b553",
+              "name": "Barang Lucu (Gashapon, Gacha)",
+              "planned": 0,
+              "actual": 0,
+              "duration": 1
+            }
+          ]
+        },
+        {
+          "id": "f743f871-0b2b-418c-9124-85a6bc979d03",
+          "name": "Lainnya",
+          "items": [
+            {
+              "id": "53c7bfca-b942-460a-8f5f-df3fee64f01d",
+              "name": "Salon dan Kecantikan",
+              "planned": 0,
+              "actual": 0,
+              "duration": 1
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "47b0f642-01b8-4c7c-b242-4c966f45c9cf",
+      "name": "Cicilan/Hutang",
+      "targetPercentage": 30,
+      "subcategories": [
+        {
+          "id": "6129d7ea-f29b-44e3-8edf-61ef372a9bd4",
+          "name": "Kredit & Pinjaman",
+          "items": [
+            {
+              "id": "d9641fe4-f81e-4f60-922f-961e137c1af6",
+              "name": "Kredit Pemilikan Rumah (KPR)",
+              "planned": 0,
+              "actual": 0,
+              "duration": 1
+            },
+            {
+              "id": "474e50fc-a21f-433e-b604-c6eb34436ca5",
+              "name": "KKB",
+              "planned": 0,
+              "actual": 0,
+              "duration": 1
+            },
+            {
+              "id": "b71cc297-7d22-42ca-8e6b-a3b1ffbde862",
+              "name": "Kartu Kredit (Utang Pribadi)",
+              "planned": 0,
+              "actual": 0,
+              "duration": 1
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "1b8d0348-5116-463f-9761-ada1fb5fed80",
+      "name": "Tabungan",
+      "targetPercentage": 20,
+      "subcategories": [
+        {
+          "id": "b61395de-d4d9-4263-84da-eb32dec165c4",
+          "name": "Simpanan",
+          "items": [
+            {
+              "id": "96f4508f-81c2-4f16-b354-d5d638067104",
+              "name": "Tabungan Bank",
+              "planned": 0,
+              "actual": 0,
+              "duration": 1
+            },
+            {
+              "id": "98393575-0e4d-4e5a-be3c-453523e7a8c8",
+              "name": "Reksadana",
+              "planned": 0,
+              "actual": 0,
+              "duration": 1
+            },
+            {
+              "id": "ee64ab06-aa10-443b-bcad-8436d375b110",
+              "name": "Deposito",
+              "planned": 0,
+              "actual": 0,
+              "duration": 1
+            },
+            {
+              "id": "cde76270-3216-4003-a70a-cafc92c67ac4",
+              "name": "Asuransi Jiwa (Unit Link)",
+              "planned": 0,
+              "actual": 0,
+              "duration": 1
+            },
+            {
+              "id": "0b6e01b8-545a-4eb5-9c92-46c1b2842df6",
+              "name": "Self-Investment",
+              "planned": 0,
+              "actual": 0,
+              "duration": 1
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "832b9138-f15a-4c96-8d92-08b36b70ceb7",
+      "name": "Agama/Sosial",
+      "targetPercentage": 10,
+      "subcategories": [
+        {
+          "id": "6160de18-2e92-4d60-b009-8e1d9126ee7a",
+          "name": "Sumbangan",
+          "items": [
+            {
+              "id": "76944233-8150-491c-b42a-2eb05c26d957",
+              "name": "Zakat & Sedekah",
+              "planned": 0,
+              "actual": 0,
+              "duration": 1
+            },
+            {
+              "id": "8cb7b8c9-feec-46f6-84d9-740ceb73382f",
+              "name": "Sosial & Hadiah",
+              "planned": 0,
+              "actual": 0,
+              "duration": 1
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
