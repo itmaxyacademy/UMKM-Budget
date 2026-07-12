@@ -1,9 +1,10 @@
 {
   "settings": {
-    "name": "Toro",
+    "name": "Richie Toro",
     "profile": "single",
     "realizationMonth": 7,
-    "darkMode": false
+    "darkMode": false,
+    "businessName": "Maxy Academy"
   },
   "incomes": [
     {
@@ -13,14 +14,14 @@
         {
           "id": "1d595dea-e774-4696-9bff-1adc06173148",
           "name": "Gaji",
-          "planned": 25000000,
+          "planned": 0,
           "actual": 0,
           "duration": 1
         },
         {
           "id": "b1f52234-da45-42e6-a39d-933ff82c1c84",
           "name": "Bonus",
-          "planned": 25000000,
+          "planned": 0,
           "actual": 0,
           "duration": 12
         },
@@ -479,6 +480,178 @@
               "name": "Sosial & Hadiah",
               "planned": 0,
               "actual": 0,
+              "duration": 1
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "businessIncomes": [
+    {
+      "id": "7827731e-720e-4cd0-b6e5-2cfc6e5878ef",
+      "name": "Barang A",
+      "items": [
+        {
+          "id": "220723a5-d9b4-4a43-978a-af1ee5edc3ab",
+          "name": "Penjualan - Barang A",
+          "quantity": 100,
+          "pricePlan": 10000,
+          "priceActual": 0,
+          "duration": 1,
+          "linkedId": "3023f469-d779-407f-87f7-b1dfd1970cd1"
+        },
+        {
+          "id": "3023f469-d779-407f-87f7-b1dfd1970cd1",
+          "name": "HPP - Barang A",
+          "quantity": 100,
+          "pricePlan": 3000,
+          "priceActual": 0,
+          "duration": 1,
+          "isHPP": true,
+          "linkedId": "220723a5-d9b4-4a43-978a-af1ee5edc3ab"
+        }
+      ]
+    },
+    {
+      "id": "32755223-2a82-4f2f-b0ce-b8a227bbc9b7",
+      "name": "Barang A (Online)",
+      "items": [
+        {
+          "id": "a033c828-4739-4b55-8559-80eddb55e38a",
+          "name": "Penjualan - Barang A (Online)",
+          "quantity": 200,
+          "pricePlan": 13000,
+          "priceActual": 0,
+          "duration": 1,
+          "linkedId": "97a15546-c92b-4861-bfaa-34fbe7241d8f"
+        },
+        {
+          "id": "97a15546-c92b-4861-bfaa-34fbe7241d8f",
+          "name": "HPP - Barang A (Online)",
+          "quantity": 200,
+          "pricePlan": 6500,
+          "priceActual": 0,
+          "duration": 1,
+          "isHPP": true,
+          "linkedId": "a033c828-4739-4b55-8559-80eddb55e38a"
+        }
+      ]
+    }
+  ],
+  "businessExpenses": [
+    {
+      "id": "929e854d-c038-4898-b0ca-0457bea0eab8",
+      "name": "Biaya Operasional",
+      "targetPercentage": 30,
+      "subcategories": [
+        {
+          "id": "3823ae29-515f-40c6-94fd-e7ffa1ded669",
+          "name": "Biaya Utilitas & Distribusi",
+          "items": [
+            {
+              "id": "e0d38742-1437-4d8d-94c4-55a496b8845c",
+              "name": "Biaya Listrik",
+              "quantity": 1,
+              "pricePlan": 0,
+              "priceActual": 0,
+              "duration": 1
+            },
+            {
+              "id": "d6a767b0-0f8a-4c63-85fd-447ee8641c7f",
+              "name": "Biaya Air",
+              "quantity": 1,
+              "pricePlan": 0,
+              "priceActual": 0,
+              "duration": 1
+            },
+            {
+              "id": "1c78b2d4-7e95-4e74-b014-685fda01bb75",
+              "name": "Pulsa, Paket Data & Internet",
+              "quantity": 1,
+              "pricePlan": 0,
+              "priceActual": 0,
+              "duration": 1
+            }
+          ]
+        },
+        {
+          "id": "9c90393f-7ee4-4478-9b44-1fa93bfb0525",
+          "name": "Biaya Marketing",
+          "items": [
+            {
+              "id": "1803ee3a-5a0f-40b4-b86a-d943aed12699",
+              "name": "Biaya Packaging",
+              "quantity": 1,
+              "pricePlan": 0,
+              "priceActual": 0,
+              "duration": 1
+            },
+            {
+              "id": "c2cf80c7-e5d6-4b44-825b-59c58494ec9b",
+              "name": "Biaya Marketing Onsite",
+              "quantity": 1,
+              "pricePlan": 200000,
+              "priceActual": 0,
+              "duration": 1
+            },
+            {
+              "id": "5d497a97-f1a6-4f26-82b9-ae51703e9fc8",
+              "name": "Biaya Marketing Online",
+              "quantity": 1,
+              "pricePlan": 0,
+              "priceActual": 0,
+              "duration": 1
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "f3661569-7ff7-4ffd-aa44-dd3248c4b626",
+      "name": "Biaya Tetap",
+      "targetPercentage": 30,
+      "subcategories": [
+        {
+          "id": "e532f225-c236-4322-bc45-361514ace15e",
+          "name": "Biaya Gaji",
+          "items": [
+            {
+              "id": "466dacb9-1dbe-4c29-ac25-a297beeabd02",
+              "name": "Gaji Saya / Owner",
+              "quantity": 1,
+              "pricePlan": 0,
+              "priceActual": 0,
+              "duration": 1
+            },
+            {
+              "id": "8a6decf8-4de5-4fce-b1f6-5f4224543a6d",
+              "name": "Gaji Pegawai",
+              "quantity": 1,
+              "pricePlan": 0,
+              "priceActual": 0,
+              "duration": 1
+            }
+          ]
+        },
+        {
+          "id": "76b94ac8-9815-49b9-aee6-339ccec7676f",
+          "name": "Biaya Tempat/Lokasi",
+          "items": [
+            {
+              "id": "fd402d5d-8377-42fa-ab87-36c8a9c8f67c",
+              "name": "Biaya Sewa",
+              "quantity": 1,
+              "pricePlan": 0,
+              "priceActual": 0,
+              "duration": 1
+            },
+            {
+              "id": "91cca358-3fa1-41de-a6f1-37af43a276a7",
+              "name": "Retribusi Sewa",
+              "quantity": 1,
+              "pricePlan": 0,
+              "priceActual": 0,
               "duration": 1
             }
           ]

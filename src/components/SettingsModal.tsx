@@ -13,6 +13,7 @@ interface SettingsModalProps {
 }
 
 export function SettingsModal({ isOpen, onClose, data, onUpdateData, onImportData }: SettingsModalProps) {
+  const [activeTab, setActiveTab] = useState<'settings' | 'credit'>('settings');
   const fileInputRef = useRef<HTMLInputElement>(null);
   const templateInputRef = useRef<HTMLInputElement>(null);
 
@@ -77,19 +78,37 @@ export function SettingsModal({ isOpen, onClose, data, onUpdateData, onImportDat
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/50 backdrop-blur-sm">
       <div className="bg-white dark:bg-slate-800 rounded-2xl shadow-xl w-full max-w-md max-h-[90vh] overflow-hidden flex flex-col border dark:border-slate-700">
-        <div className="flex items-center justify-between px-6 py-4 border-b border-slate-100 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 shrink-0">
-          <h2 className="text-lg font-bold text-slate-800 dark:text-slate-100 flex items-center gap-2">
-            <Settings size={20} className="text-indigo-600 dark:text-indigo-400" />
-            Pengaturan
-          </h2>
-          <button onClick={onClose} className="text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 transition-colors">
-            <X size={20} />
-          </button>
+        <div className="flex flex-col shrink-0">
+          <div className="flex items-center justify-between px-6 py-4 border-b border-slate-100 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 shrink-0">
+            <h2 className="text-lg font-bold text-slate-800 dark:text-slate-100 flex items-center gap-2">
+              <Settings size={20} className="text-indigo-600 dark:text-indigo-400" />
+              Pengaturan
+            </h2>
+            <button onClick={onClose} className="text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 transition-colors">
+              <X size={20} />
+            </button>
+          </div>
+          <div className="flex items-center px-6 border-b border-slate-100 dark:border-slate-700 bg-white dark:bg-slate-800">
+            <button
+              className={`px-4 py-3 text-sm font-medium border-b-2 transition-colors ${activeTab === 'settings' ? 'border-indigo-600 text-indigo-600 dark:text-indigo-400 dark:border-indigo-400' : 'border-transparent text-slate-500 hover:text-slate-700 dark:text-slate-400 dark:hover:text-slate-200'}`}
+              onClick={() => setActiveTab('settings')}
+            >
+              Pengaturan
+            </button>
+            <button
+              className={`px-4 py-3 text-sm font-medium border-b-2 transition-colors ${activeTab === 'credit' ? 'border-indigo-600 text-indigo-600 dark:text-indigo-400 dark:border-indigo-400' : 'border-transparent text-slate-500 hover:text-slate-700 dark:text-slate-400 dark:hover:text-slate-200'}`}
+              onClick={() => setActiveTab('credit')}
+            >
+              Kredit
+            </button>
+          </div>
         </div>
 
         <div className="p-6 flex flex-col gap-6 overflow-y-auto">
-          <div className="space-y-4">
-            <h3 className="text-sm font-bold text-slate-400 dark:text-slate-500 uppercase tracking-wider">Profil Pengguna</h3>
+          {activeTab === 'settings' ? (
+            <>
+              <div className="space-y-4">
+            <h3 className="text-sm font-bold text-slate-400 dark:text-slate-500 uppercase tracking-wider">Profil Pengguna & Bisnis</h3>
             
             <div>
               <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">Nama</label>
@@ -99,6 +118,17 @@ export function SettingsModal({ isOpen, onClose, data, onUpdateData, onImportDat
                 onChange={handleNameChange}
                 className="w-full border border-slate-300 dark:border-slate-600 dark:bg-slate-700 dark:text-white rounded-lg px-3 py-2 focus:outline-none focus:border-indigo-500"
                 placeholder="Masukkan nama"
+              />
+            </div>
+
+            <div>
+              <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">Nama Bisnis / Perusahaan</label>
+              <input
+                type="text"
+                value={data.settings?.businessName || ''}
+                onChange={(e) => onUpdateData({ ...data, settings: { ...data.settings, businessName: e.target.value } })}
+                className="w-full border border-slate-300 dark:border-slate-600 dark:bg-slate-700 dark:text-white rounded-lg px-3 py-2 focus:outline-none focus:border-indigo-500"
+                placeholder="Masukkan nama bisnis"
               />
             </div>
             
@@ -242,6 +272,21 @@ export function SettingsModal({ isOpen, onClose, data, onUpdateData, onImportDat
               />
             </div>
           </div>
+            </>
+          ) : (
+            <div className="flex flex-col items-center justify-center py-8 px-4 text-center space-y-4">
+              <div className="w-16 h-16 bg-indigo-100 dark:bg-indigo-900/50 rounded-full flex items-center justify-center mb-2">
+                <Settings size={32} className="text-indigo-600 dark:text-indigo-400" />
+              </div>
+              <h3 className="text-lg font-bold text-slate-800 dark:text-slate-100">Kredit</h3>
+              <p className="text-sm text-slate-600 dark:text-slate-300">
+                Dibuat oleh <span className="font-semibold">Andy Bintoro (Maxy Academy)</span> untuk kolaborasi bersama KTB UKM dan KBC (Kingdom Business Community).
+              </p>
+              <p className="text-sm text-slate-600 dark:text-slate-300 mt-2">
+                Jika ingin melakukan white label atau adopsi kurikulum UKM, dapat menghubungi KBC.
+              </p>
+            </div>
+          )}
         </div>
       </div>
     </div>

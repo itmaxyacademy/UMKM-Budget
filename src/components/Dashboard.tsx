@@ -7,12 +7,13 @@ import { Bookmark, Check } from 'lucide-react';
 interface DashboardProps {
   data: BudgetData;
   mode?: 'plan' | 'realization';
+  budgetMode?: 'personal' | 'business';
 }
 
-export function Dashboard({ data, mode = 'plan' }: DashboardProps) {
+export function Dashboard({ data, mode = 'plan', budgetMode = 'personal' }: DashboardProps) {
   const [recurringToggle, setRecurringToggle] = useState<'month' | 'year'>('month');
 
-  const totals = calculateTotals(data, mode);
+  const totals = calculateTotals(data, mode, budgetMode);
   const colRatio = totals.income > 0 ? (totals.expenses / totals.income) * 100 : 0;
   const surplusRatio = totals.income > 0 ? (Math.max(0, totals.surplus) / totals.income) * 100 : (totals.surplus > 0 ? 100 : 0);
 
@@ -114,8 +115,12 @@ export function Dashboard({ data, mode = 'plan' }: DashboardProps) {
         {/* TOTALS */}
         <div className="flex flex-col gap-6 mb-8">
           <div>
-            <h3 className="text-[10px] font-bold text-slate-400 dark:text-slate-500 tracking-widest uppercase mb-1">TOTAL MONTHLY INCOME</h3>
-            <p className="text-4xl font-extrabold text-slate-900 dark:text-slate-100 tracking-tight">{formatCurrency(totals.income, data.settings.currency)}</p>
+            <h3 className="text-[10px] font-bold text-slate-400 dark:text-slate-500 tracking-widest uppercase mb-1">
+              {budgetMode === 'business' ? 'TOTAL LABA KOTOR' : 'TOTAL MONTHLY INCOME'}
+            </h3>
+            <p className="text-4xl font-extrabold text-slate-900 dark:text-slate-100 tracking-tight">
+              {formatCurrency(budgetMode === 'business' ? totals.grossProfit : totals.income, data.settings.currency)}
+            </p>
             {mode === 'realization' && incomeDiff !== null && (
               <p className={`text-xs font-semibold mt-1 ${incomeDiff >= 0 ? 'text-emerald-600 dark:text-emerald-400' : 'text-rose-600 dark:text-rose-400'}`}>
                 {incomeDiff >= 0 ? '▲' : '▼'} {formatCurrency(Math.abs(incomeDiff), data.settings.currency)} dari bulan lalu
@@ -123,8 +128,12 @@ export function Dashboard({ data, mode = 'plan' }: DashboardProps) {
             )}
           </div>
           <div>
-            <h3 className="text-[10px] font-bold text-slate-400 dark:text-slate-500 tracking-widest uppercase mb-1">COST OF LIVING (COL)</h3>
-            <p className="text-4xl font-extrabold text-slate-900 dark:text-slate-100 tracking-tight">{formatCurrency(totals.expenses, data.settings.currency)}</p>
+            <h3 className="text-[10px] font-bold text-slate-400 dark:text-slate-500 tracking-widest uppercase mb-1">
+              {budgetMode === 'business' ? 'TOTAL PENGELUARAN' : 'COST OF LIVING (COL)'}
+            </h3>
+            <p className="text-4xl font-extrabold text-slate-900 dark:text-slate-100 tracking-tight">
+              {formatCurrency(budgetMode === 'business' ? totals.operatingExpenses : totals.expenses, data.settings.currency)}
+            </p>
             {mode === 'realization' && expenseDiff !== null && (
               <p className={`text-xs font-semibold mt-1 ${expenseDiff <= 0 ? 'text-emerald-600 dark:text-emerald-400' : 'text-rose-600 dark:text-rose-400'}`}>
                 {expenseDiff <= 0 ? '▼' : '▲'} {formatCurrency(Math.abs(expenseDiff), data.settings.currency)} dari bulan lalu
@@ -137,7 +146,7 @@ export function Dashboard({ data, mode = 'plan' }: DashboardProps) {
         <div className={`p-6 rounded-2xl border-2 flex flex-col items-center justify-center ${totals.surplus >= 0 ? 'bg-emerald-50 dark:bg-emerald-900/30 border-emerald-500 dark:border-emerald-700' : 'bg-rose-50 dark:bg-rose-900/30 border-rose-500 dark:border-rose-700'}`}>
           <div className={`flex items-center gap-2 text-sm font-extrabold tracking-widest mb-2 uppercase ${totals.surplus >= 0 ? 'text-emerald-700 dark:text-emerald-400' : 'text-rose-700 dark:text-rose-400'}`}>
             <Check size={16} strokeWidth={3} />
-            <span>{totals.surplus >= 0 ? 'SURPLUS' : 'DEFICIT'}</span>
+            <span>{totals.surplus >= 0 ? (budgetMode === 'business' ? 'PROFIT' : 'SURPLUS') : (budgetMode === 'business' ? 'RUGI' : 'DEFICIT')}</span>
           </div>
           <p className={`text-4xl font-extrabold tracking-tight ${totals.surplus >= 0 ? 'text-emerald-600 dark:text-emerald-400' : 'text-rose-600 dark:text-rose-400'}`}>
             {formatCurrency(Math.abs(totals.surplus), data.settings.currency)}
@@ -148,37 +157,41 @@ export function Dashboard({ data, mode = 'plan' }: DashboardProps) {
       <div className="h-px bg-slate-200 dark:bg-slate-700 my-2"></div>
 
       {/* RECURRING COST */}
-      <div className="bg-teal-50 dark:bg-teal-900/30 border-2 border-teal-400 dark:border-teal-700 rounded-3xl p-6 flex flex-col">
-        <div className="flex justify-between items-start mb-6">
-          <div className="flex items-center gap-2 text-teal-700 dark:text-teal-400 font-extrabold tracking-widest text-sm uppercase">
-            <Bookmark size={18} strokeWidth={3} />
-            <span>RECURRING COST</span>
+      {budgetMode !== 'business' && (
+        <>
+          <div className="bg-teal-50 dark:bg-teal-900/30 border-2 border-teal-400 dark:border-teal-700 rounded-3xl p-6 flex flex-col">
+            <div className="flex justify-between items-start mb-6">
+              <div className="flex items-center gap-2 text-teal-700 dark:text-teal-400 font-extrabold tracking-widest text-sm uppercase">
+                <Bookmark size={18} strokeWidth={3} />
+                <span>RECURRING COST</span>
+              </div>
+              <div className="flex bg-white dark:bg-slate-800 rounded-full p-1 shadow-sm border border-teal-100 dark:border-teal-800">
+                <button
+                  onClick={() => setRecurringToggle('month')}
+                  className={`px-3 py-1 rounded-full text-[10px] font-bold tracking-wider transition-colors ${recurringToggle === 'month' ? 'bg-teal-500 text-white' : 'text-slate-500 dark:text-slate-400 hover:text-slate-700 dark:hover:text-slate-200'}`}
+                >
+                  PER BULAN
+                </button>
+                <button
+                  onClick={() => setRecurringToggle('year')}
+                  className={`px-3 py-1 rounded-full text-[10px] font-bold tracking-wider transition-colors ${recurringToggle === 'year' ? 'bg-teal-500 text-white' : 'text-slate-500 dark:text-slate-400 hover:text-slate-700 dark:hover:text-slate-200'}`}
+                >
+                  PER TAHUN
+                </button>
+              </div>
+            </div>
+            
+            <p className="text-4xl font-extrabold text-teal-800 dark:text-teal-400 tracking-tight mb-2">
+              {formatCurrency(recurringToggle === 'month' ? totals.recurringCostMonth : totals.recurringCostYear, data.settings.currency)}
+            </p>
+            <p className="text-sm font-medium text-teal-600 dark:text-teal-500 italic">
+              Set aside this much each {recurringToggle === 'month' ? 'month' : 'year'} for non-monthly bills
+            </p>
           </div>
-          <div className="flex bg-white dark:bg-slate-800 rounded-full p-1 shadow-sm border border-teal-100 dark:border-teal-800">
-            <button
-              onClick={() => setRecurringToggle('month')}
-              className={`px-3 py-1 rounded-full text-[10px] font-bold tracking-wider transition-colors ${recurringToggle === 'month' ? 'bg-teal-500 text-white' : 'text-slate-500 dark:text-slate-400 hover:text-slate-700 dark:hover:text-slate-200'}`}
-            >
-              PER BULAN
-            </button>
-            <button
-              onClick={() => setRecurringToggle('year')}
-              className={`px-3 py-1 rounded-full text-[10px] font-bold tracking-wider transition-colors ${recurringToggle === 'year' ? 'bg-teal-500 text-white' : 'text-slate-500 dark:text-slate-400 hover:text-slate-700 dark:hover:text-slate-200'}`}
-            >
-              PER TAHUN
-            </button>
-          </div>
-        </div>
-        
-        <p className="text-4xl font-extrabold text-teal-800 dark:text-teal-400 tracking-tight mb-2">
-          {formatCurrency(recurringToggle === 'month' ? totals.recurringCostMonth : totals.recurringCostYear, data.settings.currency)}
-        </p>
-        <p className="text-sm font-medium text-teal-600 dark:text-teal-500 italic">
-          Set aside this much each {recurringToggle === 'month' ? 'month' : 'year'} for non-monthly bills
-        </p>
-      </div>
 
-      <div className="h-px bg-slate-200 dark:bg-slate-700 my-2"></div>
+          <div className="h-px bg-slate-200 dark:bg-slate-700 my-2"></div>
+        </>
+      )}
 
       {/* STRATEGY ALIGNMENT */}
       <div className="flex flex-col mb-8">

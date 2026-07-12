@@ -23,39 +23,81 @@ export const formatCurrency = (amount: number, currencyCode: string = 'IDR') => 
   }).format(amount);
 };
 
-export const calculateTotals = (data: BudgetData, mode: 'plan' | 'realization') => {
+export const calculateTotals = (data: BudgetData, mode: 'plan' | 'realization', budgetMode: 'personal' | 'business' = 'personal') => {
   let income = 0;
-  data.incomes.forEach((group) => {
-    group.items.forEach((item) => {
-      income += item[mode === 'plan' ? 'planned' : 'actual'] / (item.duration || 1);
-    });
-  });
-
   let expenses = 0;
   let recurringCostYear = 0;
   let recurringCostMonth = 0;
-
   const categoryTotals: Record<string, { total: number, targetPercentage: number }> = {};
+
+  if (budgetMode === 'personal') {
+    data.incomes.forEach((group) => {
+      group.items.forEach((item) => {
+        income += item[mode === 'plan' ? 'planned' : 'actual'] / (item.duration || 1);
+      });
+    });
   
-  (data.expenses || []).forEach((category) => {
-    let categoryTotal = 0;
-    (category.subcategories || []).forEach((group) => {
-      (group.items || []).forEach((item) => {
-        const itemValue = item[mode === 'plan' ? 'planned' : 'actual'];
-        const monthlyValue = itemValue / (item.duration || 1);
-        categoryTotal += monthlyValue;
-        
-        if ((item.duration || 1) > 1) {
-          recurringCostMonth += monthlyValue;
-          recurringCostYear += (monthlyValue * 12);
+    (data.expenses || []).forEach((category) => {
+      let categoryTotal = 0;
+      (category.subcategories || []).forEach((group) => {
+        (group.items || []).forEach((item) => {
+          const itemValue = item[mode === 'plan' ? 'planned' : 'actual'];
+          const monthlyValue = itemValue / (item.duration || 1);
+          categoryTotal += monthlyValue;
+          
+          if ((item.duration || 1) > 1) {
+            recurringCostMonth += monthlyValue;
+            recurringCostYear += (monthlyValue * 12);
+          }
+        });
+      });
+      categoryTotals[category.name] = { total: categoryTotal, targetPercentage: category.targetPercentage };
+      expenses += categoryTotal;
+    });
+  } else {
+    (data.businessIncomes || []).forEach((group) => {
+      group.items.forEach((item) => {
+        const price = mode === 'plan' ? item.pricePlan : item.priceActual;
+        const val = (item.quantity * price) / (item.duration || 1);
+        if (item.isHPP) {
+          expenses += val;
+          if (!categoryTotals['Harga Pokok Penjualan (HPP)']) {
+            categoryTotals['Harga Pokok Penjualan (HPP)'] = { total: 0, targetPercentage: 0 };
+          }
+          categoryTotals['Harga Pokok Penjualan (HPP)'].total += val;
+        } else {
+          income += val;
         }
       });
     });
-    categoryTotals[category.name] = { total: categoryTotal, targetPercentage: category.targetPercentage };
-    expenses += categoryTotal;
-  });
+
+    (data.businessExpenses || []).forEach((category) => {
+      let categoryTotal = 0;
+      (category.subcategories || []).forEach((group) => {
+        (group.items || []).forEach((item) => {
+          const price = mode === 'plan' ? item.pricePlan : item.priceActual;
+          const monthlyValue = (item.quantity * price) / (item.duration || 1);
+          categoryTotal += monthlyValue;
+          
+          if ((item.duration || 1) > 1) {
+            recurringCostMonth += monthlyValue;
+            recurringCostYear += (monthlyValue * 12);
+          }
+        });
+      });
+      categoryTotals[category.name] = { total: categoryTotal, targetPercentage: category.targetPercentage };
+      expenses += categoryTotal;
+    });
+  }
 
   const surplus = income - expenses;
+
+  let hppTotal = 0;
+  if (categoryTotals['Harga Pokok Penjualan (HPP)']) {
+    hppTotal = categoryTotals['Harga Pokok Penjualan (HPP)'].total;
+  }
+  const grossProfit = budgetMode === 'business' ? income - hppTotal : income;
+  const operatingExpenses = budgetMode === 'business' ? expenses - hppTotal : expenses;
 
   return {
     income,
@@ -63,11 +105,14 @@ export const calculateTotals = (data: BudgetData, mode: 'plan' | 'realization') 
     surplus,
     categoryTotals,
     recurringCostMonth,
-    recurringCostYear
+    recurringCostYear,
+    hppTotal,
+    grossProfit,
+    operatingExpenses
   };
 };
 
-export const exportToPdf = async (data: BudgetData, mode: 'plan' | 'realization') => {
+export const exportToPdf = async (data: BudgetData, mode: 'plan' | 'realization', budgetMode: 'personal' | 'business' = 'personal') => {
   const doc = new jsPDF();
   const title = `Executive Budget Report - ${mode === 'plan' ? 'Plan' : 'Realization'}`;
   const dateStr = new Date().toLocaleDateString('id-ID', { year: 'numeric', month: 'long', day: 'numeric' });
@@ -80,7 +125,7 @@ export const exportToPdf = async (data: BudgetData, mode: 'plan' | 'realization'
   doc.setFontSize(22);
   doc.setTextColor(255, 255, 255);
   doc.setFont('helvetica', 'bold');
-  doc.text('UMKM Budget Pro', 14, 25);
+  doc.text(budgetMode === 'business' ? 'UMKM Budget Pro (Business)' : 'UMKM Budget Pro', 14, 25);
   
   doc.setFontSize(14);
   doc.setFont('helvetica', 'normal');
@@ -91,10 +136,13 @@ export const exportToPdf = async (data: BudgetData, mode: 'plan' | 'realization'
   doc.text(`Generated on: ${dateStr} ${timeStr}`, doc.internal.pageSize.getWidth() - 14, 25, { align: 'right' });
   if (data.settings?.name) {
     doc.text(`Prepared for: ${data.settings.name}`, doc.internal.pageSize.getWidth() - 14, 35, { align: 'right' });
+    if (budgetMode === 'business' && data.settings.businessName) {
+      doc.text(`Business: ${data.settings.businessName}`, doc.internal.pageSize.getWidth() - 14, 45, { align: 'right' });
+    }
   }
 
   // Calculate Totals
-  const totals = calculateTotals(data, mode);
+  const totals = calculateTotals(data, mode, budgetMode);
 
   // Summary Table
   doc.setFontSize(16);
@@ -207,18 +255,29 @@ export const exportToPdf = async (data: BudgetData, mode: 'plan' | 'realization'
   // Income Breakdown
   doc.setFontSize(14);
   doc.setTextColor(15, 23, 42);
-  doc.text('Income Details', 14, finalY);
+  doc.text(budgetMode === 'business' ? 'Revenue Details' : 'Income Details', 14, finalY);
   
   const incomeRows: any[] = [];
-  data.incomes.forEach(g => {
-    g.items.forEach(i => {
-      incomeRows.push([g.name, i.name, formatCurrency((mode === 'plan' ? i.planned : i.actual) * i.duration, data.settings.currency)]);
+  if (budgetMode === 'personal') {
+    data.incomes.forEach(g => {
+      g.items.forEach(i => {
+        incomeRows.push([g.name, i.name, formatCurrency((mode === 'plan' ? i.planned : i.actual) * i.duration, data.settings.currency)]);
+      });
     });
-  });
+  } else {
+    (data.businessIncomes || []).forEach(g => {
+      g.items.forEach(i => {
+        if (!i.isHPP) {
+          const price = mode === 'plan' ? i.pricePlan : i.priceActual;
+          incomeRows.push([g.name, i.name, formatCurrency(i.quantity * price, data.settings.currency)]);
+        }
+      });
+    });
+  }
 
   autoTable(doc, {
     startY: finalY + 5,
-    head: [['Income Group', 'Item', 'Amount']],
+    head: [[budgetMode === 'business' ? 'Revenue Group' : 'Income Group', 'Item', 'Amount']],
     body: incomeRows,
     theme: 'striped',
     headStyles: { fillColor: [99, 102, 241] }, // indigo-500
@@ -234,7 +293,31 @@ export const exportToPdf = async (data: BudgetData, mode: 'plan' | 'realization'
   doc.text('Expense Details by Category', 14, finalY);
   finalY += 10;
 
-  data.expenses.forEach(category => {
+  const expensesToIterate = budgetMode === 'personal' ? data.expenses : [...(data.businessExpenses || [])];
+
+  if (budgetMode === 'business') {
+    const hppSubcategories: any[] = [];
+    (data.businessIncomes || []).forEach(g => {
+      const hppItems = g.items.filter(i => i.isHPP);
+      if (hppItems.length > 0) {
+        hppSubcategories.push({
+          name: g.name,
+          items: hppItems
+        });
+      }
+    });
+    
+    if (hppSubcategories.length > 0) {
+      expensesToIterate.unshift({
+        id: 'hpp-virtual-cat',
+        name: 'Harga Pokok Penjualan (HPP)',
+        targetPercentage: 0,
+        subcategories: hppSubcategories
+      } as any);
+    }
+  }
+
+  expensesToIterate.forEach(category => {
     if (finalY > doc.internal.pageSize.getHeight() - 40) {
       doc.addPage();
       finalY = 20;
@@ -249,7 +332,13 @@ export const exportToPdf = async (data: BudgetData, mode: 'plan' | 'realization'
     let catTotal = 0;
     category.subcategories.forEach(s => {
       s.items.forEach(i => {
-        const val = (mode === 'plan' ? i.planned : i.actual) * i.duration;
+        let val = 0;
+        if (budgetMode === 'personal') {
+          val = (mode === 'plan' ? i.planned : i.actual) * (i.duration || 1);
+        } else {
+          const price = mode === 'plan' ? i.pricePlan : i.priceActual;
+          val = i.quantity * price;
+        }
         catTotal += val;
         categoryRows.push([s.name, i.name, formatCurrency(val, data.settings.currency)]);
       });
@@ -279,7 +368,7 @@ export const exportToPdf = async (data: BudgetData, mode: 'plan' | 'realization'
   });
   
   // Footer page numbers
-  const pageCount = doc.internal.getNumberOfPages();
+  const pageCount = (doc as any).internal.getNumberOfPages();
   doc.setFontSize(9);
   doc.setTextColor(150, 150, 150);
   for(let i = 1; i <= pageCount; i++) {
@@ -290,64 +379,126 @@ export const exportToPdf = async (data: BudgetData, mode: 'plan' | 'realization'
   doc.save(`budget-${mode}-${new Date().toISOString().split('T')[0]}.pdf`);
 };
 
-export const exportToCsv = (data: BudgetData, mode: 'plan' | 'realization') => {
+export const exportToCsv = (data: BudgetData, mode: 'plan' | 'realization', budgetMode: 'personal' | 'business' = 'personal') => {
   const rows: string[][] = [];
   
   rows.push(['Type', 'Category/Group', 'Subcategory', 'Item', 'Amount']);
   
-  data.incomes.forEach(g => {
-    g.items.forEach(i => {
-      rows.push(['Income', g.name, '', i.name, ((mode === 'plan' ? i.planned : i.actual) * i.duration).toString()]);
-    });
-  });
-  
-  data.expenses.forEach(c => {
-    c.subcategories.forEach(s => {
-      s.items.forEach(i => {
-        rows.push(['Expense', c.name, s.name, i.name, ((mode === 'plan' ? i.planned : i.actual) * i.duration).toString()]);
+  if (budgetMode === 'personal') {
+    data.incomes.forEach(g => {
+      g.items.forEach(i => {
+        rows.push(['Income', g.name, '', i.name, ((mode === 'plan' ? i.planned : i.actual) * i.duration).toString()]);
       });
     });
-  });
+    
+    data.expenses.forEach(c => {
+      c.subcategories.forEach(s => {
+        s.items.forEach(i => {
+          rows.push(['Expense', c.name, s.name, i.name, ((mode === 'plan' ? i.planned : i.actual) * i.duration).toString()]);
+        });
+      });
+    });
+  } else {
+    (data.businessIncomes || []).forEach(g => {
+      g.items.forEach(i => {
+        const price = mode === 'plan' ? i.pricePlan : i.priceActual;
+        if (i.isHPP) {
+          rows.push(['Expense', 'Harga Pokok Penjualan (HPP)', g.name, i.name, (i.quantity * price).toString()]);
+        } else {
+          rows.push(['Revenue', g.name, '', i.name, (i.quantity * price).toString()]);
+        }
+      });
+    });
+
+    (data.businessExpenses || []).forEach(c => {
+      c.subcategories.forEach(s => {
+        s.items.forEach(i => {
+          const price = mode === 'plan' ? i.pricePlan : i.priceActual;
+          rows.push(['Expense', c.name, s.name, i.name, (i.quantity * price).toString()]);
+        });
+      });
+    });
+  }
 
   const csvContent = rows.map(e => e.map(item => `"${item}"`).join(",")).join("\n");
   const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
   const url = URL.createObjectURL(blob);
   const link = document.createElement("a");
   link.setAttribute("href", url);
-  link.setAttribute("download", `budget-${mode}-${new Date().toISOString().split('T')[0]}.csv`);
+  link.setAttribute("download", `budget-${budgetMode}-${mode}-${new Date().toISOString().split('T')[0]}.csv`);
   document.body.appendChild(link);
   link.click();
   document.body.removeChild(link);
 };
 
-export const exportToXls = (data: BudgetData, mode: 'plan' | 'realization') => {
+export const exportToXls = (data: BudgetData, mode: 'plan' | 'realization', budgetMode: 'personal' | 'business' = 'personal') => {
   const rows: any[] = [];
   
-  data.incomes.forEach(g => {
-    g.items.forEach(i => {
-      rows.push({
-        Type: 'Income',
-        Group: g.name,
-        Subcategory: '',
-        Item: i.name,
-        Amount: (mode === 'plan' ? i.planned : i.actual) * i.duration
-      });
-    });
-  });
-  
-  data.expenses.forEach(c => {
-    c.subcategories.forEach(s => {
-      s.items.forEach(i => {
+  if (budgetMode === 'personal') {
+    data.incomes.forEach(g => {
+      g.items.forEach(i => {
         rows.push({
-          Type: 'Expense',
-          Group: c.name,
-          Subcategory: s.name,
+          Type: 'Income',
+          Group: g.name,
+          Subcategory: '',
           Item: i.name,
           Amount: (mode === 'plan' ? i.planned : i.actual) * i.duration
         });
       });
     });
-  });
+    
+    data.expenses.forEach(c => {
+      c.subcategories.forEach(s => {
+        s.items.forEach(i => {
+          rows.push({
+            Type: 'Expense',
+            Group: c.name,
+            Subcategory: s.name,
+            Item: i.name,
+            Amount: (mode === 'plan' ? i.planned : i.actual) * i.duration
+          });
+        });
+      });
+    });
+  } else {
+    (data.businessIncomes || []).forEach(g => {
+      g.items.forEach(i => {
+        const price = mode === 'plan' ? i.pricePlan : i.priceActual;
+        if (i.isHPP) {
+          rows.push({
+            Type: 'Expense',
+            Group: 'Harga Pokok Penjualan (HPP)',
+            Subcategory: g.name,
+            Item: i.name,
+            Amount: i.quantity * price
+          });
+        } else {
+          rows.push({
+            Type: 'Revenue',
+            Group: g.name,
+            Subcategory: '',
+            Item: i.name,
+            Amount: i.quantity * price
+          });
+        }
+      });
+    });
+    
+    (data.businessExpenses || []).forEach(c => {
+      c.subcategories.forEach(s => {
+        s.items.forEach(i => {
+          const price = mode === 'plan' ? i.pricePlan : i.priceActual;
+          rows.push({
+            Type: 'Expense',
+            Group: c.name,
+            Subcategory: s.name,
+            Item: i.name,
+            Amount: i.quantity * price
+          });
+        });
+      });
+    });
+  }
 
   const worksheet = XLSX.utils.json_to_sheet(rows);
   const workbook = XLSX.utils.book_new();

@@ -9,6 +9,8 @@ import { defaultBudgetData, getProfileTemplate, generateId } from './data';
 import { Dashboard } from './components/Dashboard';
 import { BudgetCategoryList } from './components/BudgetCategoryList';
 import { ExpenseCategoryList } from './components/ExpenseCategoryList';
+import { BusinessIncomeList } from './components/BusinessIncomeList';
+import { BusinessExpenseList } from './components/BusinessExpenseList';
 import { SettingsModal } from './components/SettingsModal';
 import { exportToJson, exportToPdf, exportToCsv, exportToXls } from './utils';
 import { FileText, Calculator, Settings, Save, Upload } from 'lucide-react';
@@ -39,6 +41,7 @@ export default function App() {
   });
 
   const [activeTab, setActiveTab] = useState<'plan' | 'realization' | 'more'>('plan');
+  const [budgetMode, setBudgetMode] = useState<'personal' | 'business'>('personal');
   const [isSettingsOpen, setIsSettingsOpen] = useState(false);
   const [showOnboarding, setShowOnboarding] = useState(() => !localStorage.getItem('budget_data_onboarded'));
 
@@ -130,6 +133,43 @@ export default function App() {
     alert('Realisasi berhasil disimpan ke riwayat dan diunduh!');
   };
 
+  const handleAddBusinessProduct = () => {
+    const newProductId = generateId();
+    const newHppId = generateId();
+    const newGroupId = generateId();
+    
+    const newItem = {
+      id: newProductId,
+      name: 'Penjualan - Barang Baru',
+      quantity: 1,
+      pricePlan: 0,
+      priceActual: 0,
+      duration: 1,
+      linkedId: newHppId
+    };
+
+    const newHppItem = {
+      id: newHppId,
+      name: 'HPP - Barang Baru',
+      quantity: 1,
+      pricePlan: 0,
+      priceActual: 0,
+      duration: 1,
+      isHPP: true,
+      linkedId: newProductId
+    };
+
+    const newGroup = {
+      id: newGroupId,
+      name: 'Barang Baru',
+      items: [newItem, newHppItem]
+    };
+
+    const updatedIncomes = [...(data.businessIncomes || []), newGroup];
+
+    setData({ ...data, businessIncomes: updatedIncomes });
+  };
+
   return (
     <div className={`min-h-screen bg-slate-50 dark:bg-slate-900 text-slate-800 dark:text-slate-100 font-sans flex flex-col ${data.settings?.darkMode ? 'dark' : ''}`}>
       <OnboardingModal isOpen={showOnboarding} onComplete={handleOnboardingComplete} />
@@ -162,6 +202,23 @@ export default function App() {
           <div className="flex items-center gap-2 md:gap-4 w-full md:w-auto justify-between md:justify-end">
             <div className="flex bg-slate-100 dark:bg-slate-700 p-1 rounded-lg border border-slate-200 dark:border-slate-600 w-full md:w-auto">
               <button 
+                onClick={() => setBudgetMode('personal')}
+                className={`flex-1 md:flex-none px-2 md:px-3 py-1.5 text-xs font-semibold rounded ${budgetMode === 'personal' ? 'bg-white dark:bg-slate-800 shadow-sm text-slate-900 dark:text-slate-100' : 'text-slate-500 dark:text-slate-400'}`}
+              >
+                Pribadi
+              </button>
+              <button 
+                onClick={() => setBudgetMode('business')}
+                className={`flex-1 md:flex-none px-2 md:px-3 py-1.5 text-xs font-semibold rounded ${budgetMode === 'business' ? 'bg-white dark:bg-slate-800 shadow-sm text-slate-900 dark:text-slate-100' : 'text-slate-500 dark:text-slate-400'}`}
+              >
+                Bisnis
+              </button>
+            </div>
+
+            <div className="hidden md:block h-6 w-px bg-slate-200 dark:bg-slate-700 mx-2"></div>
+
+            <div className="flex bg-slate-100 dark:bg-slate-700 p-1 rounded-lg border border-slate-200 dark:border-slate-600 w-full md:w-auto">
+              <button 
                 onClick={() => setActiveTab('plan')}
                 className={`flex-1 md:flex-none px-2 md:px-3 py-1.5 text-xs font-semibold rounded ${activeTab === 'plan' ? 'bg-white dark:bg-slate-800 shadow-sm text-slate-900 dark:text-slate-100' : 'text-slate-500 dark:text-slate-400'}`}
               >
@@ -177,7 +234,7 @@ export default function App() {
                 onClick={() => setActiveTab('more')}
                 className={`flex-1 md:flex-none px-2 md:px-3 py-1.5 text-xs font-semibold rounded ${activeTab === 'more' ? 'bg-white dark:bg-slate-800 shadow-sm text-slate-900 dark:text-slate-100' : 'text-slate-500 dark:text-slate-400'}`}
               >
-                Fitur Lainnya
+                Lainnya
               </button>
             </div>
             
@@ -212,9 +269,9 @@ export default function App() {
               </button>
               <div id="export-menu-desktop" className="hidden absolute right-0 mt-2 w-32 bg-white rounded-lg shadow-lg border border-slate-200 z-50">
                 <div className="py-1">
-                  <button onClick={() => exportToPdf(data, activeTab === 'realization' ? 'realization' : 'plan')} className="block w-full text-left px-4 py-2 text-sm text-slate-700 hover:bg-slate-100">PDF</button>
-                  <button onClick={() => exportToCsv(data, activeTab === 'realization' ? 'realization' : 'plan')} className="block w-full text-left px-4 py-2 text-sm text-slate-700 hover:bg-slate-100">CSV</button>
-                  <button onClick={() => exportToXls(data, activeTab === 'realization' ? 'realization' : 'plan')} className="block w-full text-left px-4 py-2 text-sm text-slate-700 hover:bg-slate-100">XLSX</button>
+                  <button onClick={() => exportToPdf(data, activeTab === 'realization' ? 'realization' : 'plan', budgetMode)} className="block w-full text-left px-4 py-2 text-sm text-slate-700 hover:bg-slate-100">PDF</button>
+                  <button onClick={() => exportToCsv(data, activeTab === 'realization' ? 'realization' : 'plan', budgetMode)} className="block w-full text-left px-4 py-2 text-sm text-slate-700 hover:bg-slate-100">CSV</button>
+                  <button onClick={() => exportToXls(data, activeTab === 'realization' ? 'realization' : 'plan', budgetMode)} className="block w-full text-left px-4 py-2 text-sm text-slate-700 hover:bg-slate-100">XLSX</button>
                 </div>
               </div>
             </div>
@@ -244,9 +301,9 @@ export default function App() {
            </button>
            <div id="export-menu-mobile" className="hidden absolute right-0 mt-2 w-28 bg-white rounded-lg shadow-lg border border-slate-200 z-50">
               <div className="py-1">
-                <button onClick={() => exportToPdf(data, activeTab === 'realization' ? 'realization' : 'plan')} className="block w-full text-left px-4 py-2 text-sm text-slate-700 hover:bg-slate-100">PDF</button>
-                <button onClick={() => exportToCsv(data, activeTab === 'realization' ? 'realization' : 'plan')} className="block w-full text-left px-4 py-2 text-sm text-slate-700 hover:bg-slate-100">CSV</button>
-                <button onClick={() => exportToXls(data, activeTab === 'realization' ? 'realization' : 'plan')} className="block w-full text-left px-4 py-2 text-sm text-slate-700 hover:bg-slate-100">XLSX</button>
+                <button onClick={() => exportToPdf(data, activeTab === 'realization' ? 'realization' : 'plan', budgetMode)} className="block w-full text-left px-4 py-2 text-sm text-slate-700 hover:bg-slate-100">PDF</button>
+                <button onClick={() => exportToCsv(data, activeTab === 'realization' ? 'realization' : 'plan', budgetMode)} className="block w-full text-left px-4 py-2 text-sm text-slate-700 hover:bg-slate-100">CSV</button>
+                <button onClick={() => exportToXls(data, activeTab === 'realization' ? 'realization' : 'plan', budgetMode)} className="block w-full text-left px-4 py-2 text-sm text-slate-700 hover:bg-slate-100">XLSX</button>
               </div>
            </div>
          </div>
@@ -267,23 +324,45 @@ export default function App() {
           <div className="flex flex-col gap-6">
             <div className="flex flex-col lg:grid lg:grid-cols-12 gap-6">
               <div className="lg:col-span-8 flex flex-col gap-6 w-full">
-                <BudgetCategoryList currency={data.settings.currency}
-                  title="Pendapatan (Income)"
-                  type="income"
-                  mode="plan"
-                  groups={data.incomes}
-                  onUpdateGroups={(newGroups) => setData({ ...data, incomes: newGroups })}
-                />
-
-                <ExpenseCategoryList currency={data.settings.currency}
-                  title="Pengeluaran (Expenses)"
-                  mode="plan"
-                  categories={data.expenses}
-                  onUpdateCategories={(newCategories) => setData({ ...data, expenses: newCategories })}
-                />
+                {budgetMode === 'personal' ? (
+                  <>
+                    <BudgetCategoryList currency={data.settings.currency}
+                      title="Pendapatan (Income)"
+                      type="income"
+                      mode="plan"
+                      groups={data.incomes}
+                      onUpdateGroups={(newGroups) => setData({ ...data, incomes: newGroups })}
+                    />
+    
+                    <ExpenseCategoryList currency={data.settings.currency}
+                      title="Pengeluaran (Expenses)"
+                      mode="plan"
+                      categories={data.expenses}
+                      onUpdateCategories={(newCategories) => setData({ ...data, expenses: newCategories })}
+                    />
+                  </>
+                ) : (
+                  <>
+                    <BusinessIncomeList currency={data.settings.currency}
+                      title="Pendapatan Usaha (Revenue)"
+                      type="income"
+                      mode="plan"
+                      groups={data.businessIncomes || []}
+                      onUpdateGroups={(newGroups) => setData({ ...data, businessIncomes: newGroups })}
+                      onAddProduct={handleAddBusinessProduct}
+                    />
+    
+                    <BusinessExpenseList currency={data.settings.currency}
+                      title="Pengeluaran Usaha (Expenses)"
+                      mode="plan"
+                      categories={data.businessExpenses || []}
+                      onUpdateCategories={(newCategories) => setData({ ...data, businessExpenses: newCategories })}
+                    />
+                  </>
+                )}
               </div>
               <div className="lg:col-span-4 w-full bg-white dark:bg-slate-800 p-6 rounded-2xl shadow-sm border border-slate-200 dark:border-slate-700 h-fit">
-                <Dashboard data={data} mode="plan" />
+                <Dashboard data={data} mode="plan" budgetMode={budgetMode} />
               </div>
             </div>
           </div>
@@ -351,24 +430,47 @@ export default function App() {
 
             <div className="flex flex-col lg:grid lg:grid-cols-12 gap-6">
               <div className="lg:col-span-8 flex flex-col gap-6 w-full">
-                <BudgetCategoryList currency={data.settings.currency}
-                  title="Pendapatan (Income)"
-                  type="income"
-                  mode="realization"
-                  groups={data.incomes}
-                  onUpdateGroups={(newGroups) => setData({ ...data, incomes: newGroups })}
-                />
-
-                <ExpenseCategoryList currency={data.settings.currency}
-                  title="Pengeluaran (Expenses)"
-                  mode="realization"
-                  categories={data.expenses}
-                  warningThreshold={data.settings.warningThreshold}
-                  onUpdateCategories={(newCategories) => setData({ ...data, expenses: newCategories })}
-                />
+                {budgetMode === 'personal' ? (
+                  <>
+                    <BudgetCategoryList currency={data.settings.currency}
+                      title="Pendapatan (Income)"
+                      type="income"
+                      mode="realization"
+                      groups={data.incomes}
+                      onUpdateGroups={(newGroups) => setData({ ...data, incomes: newGroups })}
+                    />
+    
+                    <ExpenseCategoryList currency={data.settings.currency}
+                      title="Pengeluaran (Expenses)"
+                      mode="realization"
+                      categories={data.expenses}
+                      warningThreshold={data.settings.warningThreshold}
+                      onUpdateCategories={(newCategories) => setData({ ...data, expenses: newCategories })}
+                    />
+                  </>
+                ) : (
+                  <>
+                    <BusinessIncomeList currency={data.settings.currency}
+                      title="Pendapatan Usaha (Revenue)"
+                      type="income"
+                      mode="realization"
+                      groups={data.businessIncomes || []}
+                      onUpdateGroups={(newGroups) => setData({ ...data, businessIncomes: newGroups })}
+                      onAddProduct={handleAddBusinessProduct}
+                    />
+    
+                    <BusinessExpenseList currency={data.settings.currency}
+                      title="Pengeluaran Usaha (Expenses)"
+                      mode="realization"
+                      categories={data.businessExpenses || []}
+                      warningThreshold={data.settings.warningThreshold}
+                      onUpdateCategories={(newCategories) => setData({ ...data, businessExpenses: newCategories })}
+                    />
+                  </>
+                )}
               </div>
               <div className="lg:col-span-4 w-full bg-white dark:bg-slate-800 p-6 rounded-2xl shadow-sm border border-slate-200 dark:border-slate-700 h-fit">
-                <Dashboard data={data} mode="realization" />
+                <Dashboard data={data} mode="realization" budgetMode={budgetMode} />
               </div>
             </div>
           </div>

@@ -6,10 +6,28 @@ export interface BudgetItem {
   duration: number;
 }
 
+export interface BusinessBudgetItem {
+  id: string;
+  name: string;
+  quantity: number;
+  quantityActual?: number;
+  pricePlan: number;
+  priceActual: number;
+  duration: number;
+  isHPP?: boolean;
+  linkedId?: string;
+}
+
 export interface BudgetGroup {
   id: string;
   name: string;
   items: BudgetItem[];
+}
+
+export interface BusinessBudgetGroup {
+  id: string;
+  name: string;
+  items: BusinessBudgetItem[];
 }
 
 export interface ExpenseCategory {
@@ -19,8 +37,16 @@ export interface ExpenseCategory {
   subcategories: BudgetGroup[];
 }
 
+export interface BusinessExpenseCategory {
+  id: string;
+  name: string;
+  targetPercentage: number;
+  subcategories: BusinessBudgetGroup[];
+}
+
 export interface UserSettings {
   name: string;
+  businessName?: string;
   profile: ProfileType;
   realizationMonth?: number;
   realizationYear?: number;
@@ -35,12 +61,16 @@ export interface RealizationHistory {
   year: number;
   income: number;
   expense: number;
+  businessIncome?: number;
+  businessExpense?: number;
 }
 
 export interface BudgetData {
   settings: UserSettings;
   incomes: BudgetGroup[];
   expenses: ExpenseCategory[];
+  businessIncomes?: BusinessBudgetGroup[];
+  businessExpenses?: BusinessExpenseCategory[];
   history?: RealizationHistory[];
 }
 
