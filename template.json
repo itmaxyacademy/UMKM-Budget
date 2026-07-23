@@ -59,7 +59,7 @@
   "expenses": [
     {
       "id": "dd93c3f2-a22c-4926-92fa-63e4a31b4bb5",
-      "name": "Kebutuhan Umum",
+      "name": "Biaya Hidup (Cost of Living)",
       "targetPercentage": 40,
       "subcategories": [
         {
@@ -379,7 +379,7 @@
     },
     {
       "id": "47b0f642-01b8-4c7c-b242-4c966f45c9cf",
-      "name": "Cicilan/Hutang",
+      "name": "Cicilan/Hutang (Loan)",
       "targetPercentage": 30,
       "subcategories": [
         {
@@ -413,7 +413,7 @@
     },
     {
       "id": "1b8d0348-5116-463f-9761-ada1fb5fed80",
-      "name": "Tabungan",
+      "name": "Tabungan (Saving)",
       "targetPercentage": 20,
       "subcategories": [
         {
@@ -461,7 +461,7 @@
     },
     {
       "id": "832b9138-f15a-4c96-8d92-08b36b70ceb7",
-      "name": "Agama/Sosial",
+      "name": "Agama/Sosial (Giving)",
       "targetPercentage": 10,
       "subcategories": [
         {
