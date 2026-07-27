@@ -1,8 +1,9 @@
 import React, { useRef, useState } from 'react';
-import { Settings, X, Download, Upload, FileText, RotateCcw } from 'lucide-react';
+import { Settings, X, Download, Upload, FileText, RotateCcw, Smartphone, CheckCircle2 } from 'lucide-react';
 import { BudgetData, ProfileType } from '../types';
 import { getProfileTemplate, createDefaultBudgetData } from '../data';
 import { exportToJson } from '../utils';
+import { usePWA } from '../usePWA';
 
 interface SettingsModalProps {
   isOpen: boolean;
@@ -17,7 +18,20 @@ export function SettingsModal({ isOpen, onClose, data, onUpdateData, onImportDat
   const fileInputRef = useRef<HTMLInputElement>(null);
   const templateInputRef = useRef<HTMLInputElement>(null);
 
+  const { isInstallable, isInstalled, isIOS, installApp } = usePWA();
+
   if (!isOpen) return null;
+
+  const handleInstallClick = async () => {
+    if (isInstallable) {
+      const success = await installApp();
+      if (success) {
+        alert('Aplikasi BeceBudgeting berhasil diinstal!');
+      }
+    } else {
+      alert('Petunjuk Instalasi Aplikasi (PWA):\n\n1. Buka aplikasi ini di browser Chrome, Edge, atau Safari.\n2. Tekan tombol "Instal Aplikasi" / "Tambah ke Layar Utama" di menu browser atau address bar.');
+    }
+  };
 
   const handleNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     onUpdateData({
@@ -271,6 +285,57 @@ export function SettingsModal({ isOpen, onClose, data, onUpdateData, onImportDat
                 }}
               />
             </div>
+          </div>
+
+          <hr className="border-slate-100 dark:border-slate-700" />
+
+          <div className="space-y-3">
+            <div className="flex items-center justify-between">
+              <h3 className="text-sm font-bold text-slate-400 dark:text-slate-500 uppercase tracking-wider">
+                Aplikasi PWA
+              </h3>
+              <span className="text-[10px] bg-indigo-100 dark:bg-indigo-900/60 text-indigo-700 dark:text-indigo-300 font-semibold px-2 py-0.5 rounded-full">
+                Offline Ready
+              </span>
+            </div>
+
+            <p className="text-xs text-slate-500 dark:text-slate-400">
+              Instal aplikasi ini di HP atau Komputer Anda untuk akses cepat tanpa browser &amp; siap digunakan secara offline.
+            </p>
+
+            {isInstalled ? (
+              <div className="flex items-center gap-3 p-3 bg-emerald-50 dark:bg-emerald-950/40 border border-emerald-200 dark:border-emerald-800 rounded-xl text-emerald-800 dark:text-emerald-300">
+                <CheckCircle2 size={20} className="text-emerald-600 dark:text-emerald-400 shrink-0" />
+                <div className="text-xs font-medium">
+                  <p className="font-bold">Aplikasi Terinstal (PWA)</p>
+                  <p className="text-[11px] opacity-80">Anda sedang menggunakan BeceBudgeting versi aplikasi PWA.</p>
+                </div>
+              </div>
+            ) : isIOS ? (
+              <div className="p-3 bg-indigo-50 dark:bg-indigo-950/40 border border-indigo-200 dark:border-indigo-800 rounded-xl text-xs text-indigo-900 dark:text-indigo-200 space-y-1.5">
+                <p className="font-bold flex items-center gap-1">
+                  <Smartphone size={16} /> Cara Instal di iPhone / iPad (Safari):
+                </p>
+                <ol className="list-decimal list-inside space-y-1 text-[11px] text-slate-600 dark:text-slate-300">
+                  <li>Buka aplikasi di browser <strong>Safari</strong>.</li>
+                  <li>Tekan tombol <strong>Bagikan (Share)</strong> di bawah.</li>
+                  <li>Pilih <strong>'Tambah ke Layar Utama' ('Add to Home Screen')</strong>.</li>
+                </ol>
+              </div>
+            ) : (
+              <div className="space-y-2">
+                <button
+                  onClick={handleInstallClick}
+                  className="w-full flex items-center justify-center gap-2 px-4 py-3 bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl text-sm font-bold shadow-md hover:shadow-indigo-500/20 transition-all cursor-pointer active:scale-98"
+                >
+                  <Smartphone size={18} />
+                  Instal Aplikasi BeceBudgeting
+                </button>
+                <p className="text-[11px] text-slate-400 dark:text-slate-500 text-center">
+                  Bekerja di Google Chrome, Microsoft Edge, Brave, dan Safari.
+                </p>
+              </div>
+            )}
           </div>
             </>
           ) : (

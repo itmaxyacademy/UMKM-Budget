@@ -1,6 +1,6 @@
 {
-  "name": "",
-  "description": "",
+  "name": "BeceBudgeting UMKM",
+  "description": "Aplikasi Budgeting & Realisasi Keuangan UMKM oleh KBC x KTB UKM dengan dukungan PWA",
   "requestFramePermissions": [],
   "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
 }

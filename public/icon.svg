@@ -1,0 +1,46 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="100%" height="100%">
+  <defs>
+    <linearGradient id="bgGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#4f46e5" />
+      <stop offset="50%" stop-color="#3730a3" />
+      <stop offset="100%" stop-color="#0f172a" />
+    </linearGradient>
+    <linearGradient id="goldGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#fbbf24" />
+      <stop offset="100%" stop-color="#f59e0b" />
+    </linearGradient>
+    <linearGradient id="cardGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#ffffff" stop-opacity="0.25" />
+      <stop offset="100%" stop-color="#ffffff" stop-opacity="0.05" />
+    </linearGradient>
+    <filter id="shadow" x="-10%" y="-10%" width="120%" height="120%">
+      <feDropShadow dx="0" dy="12" stdDeviation="16" flood-color="#000000" flood-opacity="0.4" />
+    </filter>
+  </defs>
+
+  <!-- Background Canvas -->
+  <rect width="512" height="512" rx="112" fill="url(#bgGrad)" />
+
+  <!-- Decorative Circle Glow -->
+  <circle cx="256" cy="256" r="180" fill="url(#cardGrad)" filter="url(#shadow)" />
+
+  <!-- Wallet / Ledger Box Base -->
+  <rect x="116" y="156" width="280" height="200" rx="28" fill="#1e1b4b" stroke="url(#goldGrad)" stroke-width="6" filter="url(#shadow)" />
+  
+  <!-- Flap / Accent -->
+  <path d="M 116 200 L 396 200" stroke="url(#goldGrad)" stroke-width="4" stroke-dasharray="8 6" opacity="0.6" />
+
+  <!-- Bar Chart Columns inside Ledger -->
+  <rect x="156" y="270" width="28" height="50" rx="8" fill="#818cf8" />
+  <rect x="200" y="240" width="28" height="80" rx="8" fill="#38bdf8" />
+  <rect x="244" y="210" width="28" height="110" rx="8" fill="#34d399" />
+  <rect x="288" y="230" width="28" height="90" rx="8" fill="url(#goldGrad)" />
+
+  <!-- Lock / Badge Pin -->
+  <circle cx="340" cy="256" r="22" fill="url(#goldGrad)" filter="url(#shadow)" />
+  <circle cx="340" cy="256" r="10" fill="#1e1b4b" />
+
+  <!-- Top Ribbon Badge -->
+  <path d="M 206 116 L 306 116 L 296 156 L 216 156 Z" fill="url(#goldGrad)" />
+  <text x="256" y="142" font-family="system-ui, -apple-system, sans-serif" font-size="20" font-weight="900" fill="#0f172a" text-anchor="middle" letter-spacing="2">UMKM</text>
+</svg>

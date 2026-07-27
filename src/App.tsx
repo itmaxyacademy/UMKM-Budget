@@ -17,8 +17,10 @@ import { FileText, Calculator, Settings, Save, Upload } from 'lucide-react';
 
 import { MoreFeatures } from './components/MoreFeatures';
 import { OnboardingModal } from './components/OnboardingModal';
+import { usePWA } from './usePWA';
 
 export default function App() {
+  usePWA();
   const [data, setData] = useState<BudgetData>(() => {
     const saved = localStorage.getItem('budget_data');
     if (saved) {
