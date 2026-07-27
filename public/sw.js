@@ -1,5 +1,6 @@
-const CACHE_NAME = 'becebudgeting-pwa-v1';
-const STATIC_ASSETS = [
+const CACHE_NAME = 'becebudgeting-pwa-v3';
+
+const PRECACHE_URLS = [
   '/',
   '/index.html',
   '/manifest.json',
@@ -8,17 +9,24 @@ const STATIC_ASSETS = [
   '/icon-512.png'
 ];
 
-// Install Event
+// Install Event - Pre-cache essential app shell assets
 self.addEventListener('install', (event) => {
+  self.skipWaiting();
   event.waitUntil(
-    caches.open(CACHE_NAME).then((cache) => {
+    caches.open(CACHE_NAME).then(async (cache) => {
       console.log('[SW] Pre-caching app shell assets');
-      return cache.addAll(STATIC_ASSETS);
-    }).then(() => self.skipWaiting())
+      for (const url of PRECACHE_URLS) {
+        try {
+          await cache.add(url);
+        } catch (err) {
+          console.warn('[SW] Failed to pre-cache:', url, err);
+        }
+      }
+    })
   );
 });
 
-// Activate Event
+// Activate Event - Clean old caches & claim clients immediately
 self.addEventListener('activate', (event) => {
   event.waitUntil(
     caches.keys().then((cacheNames) => {
@@ -34,38 +42,89 @@ self.addEventListener('activate', (event) => {
   );
 });
 
-// Fetch Event - Stale-While-Revalidate & Cache-First
+// Fetch Event - Handle offline navigation & asset caching
 self.addEventListener('fetch', (event) => {
   if (event.request.method !== 'GET') return;
 
-  const url = new URL(event.request.url);
+  const request = event.request;
+  const url = new URL(request.url);
 
-  // Skip chrome-extension or external origin tracking
-  if (url.origin !== location.origin) return;
+  // Skip non-HTTP(S) schemes (e.g. chrome-extension://)
+  if (!url.protocol.startsWith('http')) return;
 
-  event.respondWith(
-    caches.match(event.request).then((cachedResponse) => {
-      const fetchPromise = fetch(event.request)
+  // 1. Navigation requests (e.g. user opens app or refreshes page, e.g. / or /?tab=plan)
+  if (request.mode === 'navigate' || request.headers.get('accept')?.includes('text/html')) {
+    event.respondWith(
+      fetch(request)
         .then((networkResponse) => {
-          if (networkResponse && networkResponse.status === 200) {
-            const responseToCache = networkResponse.clone();
+          if (networkResponse && networkResponse.ok) {
+            const copy = networkResponse.clone();
             caches.open(CACHE_NAME).then((cache) => {
-              cache.put(event.request, responseToCache);
+              cache.put('/', copy);
+              cache.put('/index.html', networkResponse.clone());
             });
           }
           return networkResponse;
         })
-        .catch((err) => {
-          console.warn('[SW] Fetch failed, relying on offline cache:', err);
-          return cachedResponse;
-        });
+        .catch(async () => {
+          console.log('[SW] Offline mode: serving cached HTML App Shell');
+          const cache = await caches.open(CACHE_NAME);
+          const cachedHTML =
+            (await cache.match('/')) ||
+            (await cache.match('/index.html')) ||
+            (await cache.match(request, { ignoreSearch: true }));
 
-      return cachedResponse || fetchPromise;
+          if (cachedHTML) {
+            return cachedHTML;
+          }
+
+          return new Response(
+            '<!doctype html><html lang="id"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>BeceBudgeting - Offline</title><style>body{font-family:system-ui,sans-serif;background:#0f172a;color:#fff;display:flex;align-items:center;justify-content:center;height:100vh;margin:0;text-align:center;padding:20px}.card{background:#1e293b;padding:32px;border-radius:16px;max-width:400px;box-shadow:0 10px 25px rgba(0,0,0,0.3)}h1{font-size:20px;margin-bottom:12px;color:#f59e0b}p{font-size:14px;color:#94a3b8;line-height:1.5}</style></head><body><div class="card"><h1>Anda Sedang Offline</h1><p>Aplikasi BeceBudgeting siap digunakan offline. Silakan buka kembali setelah halaman pertama kali dimuat saat ada koneksi internet.</p></div></body></html>',
+            { headers: { 'Content-Type': 'text/html; charset=utf-8' } }
+          );
+        })
+    );
+    return;
+  }
+
+  // 2. Asset requests (JS, CSS, Images, Fonts, JSON) - Cache-First with Network Fallback & Auto-Cache
+  event.respondWith(
+    caches.match(request, { ignoreSearch: true }).then((cachedResponse) => {
+      if (cachedResponse) {
+        // Fetch in background to update cache if online
+        if (navigator.onLine) {
+          fetch(request)
+            .then((networkResponse) => {
+              if (networkResponse && (networkResponse.status === 200 || networkResponse.type === 'opaque')) {
+                const copy = networkResponse.clone();
+                caches.open(CACHE_NAME).then((cache) => cache.put(request, copy));
+              }
+            })
+            .catch(() => {
+              /* ignore background fetch errors when offline */
+            });
+        }
+        return cachedResponse;
+      }
+
+      // If not in cache, fetch from network and store in cache
+      return fetch(request)
+        .then((networkResponse) => {
+          if (networkResponse && (networkResponse.status === 200 || networkResponse.type === 'opaque')) {
+            const copy = networkResponse.clone();
+            caches.open(CACHE_NAME).then((cache) => cache.put(request, copy));
+          }
+          return networkResponse;
+        })
+        .catch(() => {
+          console.warn('[SW] Fetch failed offline for asset:', request.url);
+          return new Response('', { status: 503, statusText: 'Offline - Asset Not Cached' });
+        });
     })
   );
 });
 
-// Message listener to trigger immediate activation
+// Message listener for immediate activation
 self.addEventListener('message', (event) => {
   if (event.data && event.data.type === 'SKIP_WAITING') {
     self.skipWaiting();

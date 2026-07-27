@@ -13,14 +13,14 @@ import { BusinessIncomeList } from './components/BusinessIncomeList';
 import { BusinessExpenseList } from './components/BusinessExpenseList';
 import { SettingsModal } from './components/SettingsModal';
 import { exportToJson, exportToPdf, exportToCsv, exportToXls } from './utils';
-import { FileText, Calculator, Settings, Save, Upload } from 'lucide-react';
+import { FileText, Calculator, Settings, Save, Upload, WifiOff } from 'lucide-react';
 
 import { MoreFeatures } from './components/MoreFeatures';
 import { OnboardingModal } from './components/OnboardingModal';
 import { usePWA } from './usePWA';
 
 export default function App() {
-  usePWA();
+  const { isOnline } = usePWA();
   const [data, setData] = useState<BudgetData>(() => {
     const saved = localStorage.getItem('budget_data');
     if (saved) {
@@ -191,6 +191,12 @@ export default function App() {
                 <Calculator size={20} className="text-white" />
               </div>
               <h1 className="text-lg md:text-xl font-bold text-slate-900 dark:text-slate-100 tracking-tight">UMKM Budget <span className="text-indigo-600 font-medium">Pro</span></h1>
+              {!isOnline && (
+                <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-semibold bg-amber-100 text-amber-800 dark:bg-amber-950/80 dark:text-amber-300 border border-amber-300 dark:border-amber-700 animate-pulse">
+                  <WifiOff size={12} />
+                  Offline
+                </span>
+              )}
             </div>
             <button
               onClick={() => setIsSettingsOpen(true)}

@@ -9,6 +9,7 @@ export function usePWA() {
   const [deferredPrompt, setDeferredPrompt] = useState<BeforeInstallPromptEvent | null>(null);
   const [isInstalled, setIsInstalled] = useState<boolean>(false);
   const [isIOS, setIsIOS] = useState<boolean>(false);
+  const [isOnline, setIsOnline] = useState<boolean>(navigator.onLine);
 
   useEffect(() => {
     // Register Service Worker
@@ -18,6 +19,8 @@ export function usePWA() {
           .register('/sw.js')
           .then((reg) => {
             console.log('[PWA] Service Worker registered with scope:', reg.scope);
+            // Check for updates
+            reg.update().catch(() => {});
           })
           .catch((err) => {
             console.error('[PWA] Service Worker registration failed:', err);
@@ -30,6 +33,13 @@ export function usePWA() {
         window.addEventListener('load', registerSW);
       }
     }
+
+    // Monitor Online/Offline Status
+    const handleOnline = () => setIsOnline(true);
+    const handleOffline = () => setIsOnline(false);
+
+    window.addEventListener('online', handleOnline);
+    window.addEventListener('offline', handleOffline);
 
     // Check if running in standalone mode (already installed)
     const checkStandalone = () => {
@@ -64,6 +74,8 @@ export function usePWA() {
     window.addEventListener('appinstalled', handleAppInstalled);
 
     return () => {
+      window.removeEventListener('online', handleOnline);
+      window.removeEventListener('offline', handleOffline);
       window.removeEventListener('beforeinstallprompt', handleBeforeInstallPrompt);
       window.removeEventListener('appinstalled', handleAppInstalled);
     };
@@ -91,6 +103,7 @@ export function usePWA() {
     isInstallable: !!deferredPrompt,
     isInstalled,
     isIOS,
+    isOnline,
     installApp,
     deferredPrompt
   };
