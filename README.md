@@ -1,6 +1,6 @@
 <div align="center">
   <img src="public/logo-maxy.png" alt="Maxy Academy Logo" width="180" />
-  <h1>Maxy UMKM Budget Pro</h1>
+  <h1>UMKM Budget by Maxy Academy</h1>
   <p>Aplikasi Perencanaan Anggaran & Realisasi Finansial UMKM Berbasis Web & PWA</p>
 </div>
 
@@ -8,7 +8,7 @@
 
 ## 📌 Tentang Aplikasi
 
-**Maxy UMKM Budget Pro** adalah platform manajemen dan simulasi anggaran interaktif untuk pelaku Usaha Mikro, Kecil, dan Menengah (UMKM). Aplikasi ini dirancang oleh **Maxy Academy** untuk membantu UMKM merencanakan arus kas, memantau realisasi pengeluaran, serta memisahkan keuangan pribadi dan bisnis secara disiplin.
+**UMKM Budget by Maxy Academy** adalah platform manajemen dan simulasi anggaran interaktif untuk pelaku Usaha Mikro, Kecil, dan Menengah (UMKM). Aplikasi ini dirancang oleh **Maxy Academy** untuk membantu UMKM merencanakan arus kas, memantau realisasi pengeluaran, serta memisahkan keuangan pribadi dan bisnis secara disiplin.
 
 ### Fitur Utama:
 - 📊 **Dual Mode Finansial**: Pemisahan jelas antara mode Keuangan Pribadi dan Keuangan Bisnis.

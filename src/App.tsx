@@ -193,14 +193,9 @@ export default function App() {
                   alt="Maxy Academy Logo"
                   className="h-8 sm:h-9 w-auto object-contain shrink-0 group-hover:scale-105 transition-transform"
                 />
-                <div className="flex items-center gap-2">
-                  <h1 className="text-lg md:text-xl font-extrabold text-slate-900 dark:text-slate-100 tracking-tight whitespace-nowrap">
-                    UMKM Budget <span className="text-indigo-600 dark:text-amber-400 font-semibold">Pro</span>
-                  </h1>
-                  <span className="hidden sm:inline-flex items-center text-[10px] font-bold text-slate-500 dark:text-slate-400 bg-slate-100 dark:bg-slate-700 px-2 py-0.5 rounded-full border border-slate-200 dark:border-slate-600 whitespace-nowrap">
-                    by Maxy Academy
-                  </span>
-                </div>
+                <h1 className="text-base sm:text-lg md:text-xl font-extrabold text-slate-900 dark:text-slate-100 tracking-tight whitespace-nowrap">
+                  UMKM Budget <span className="text-indigo-600 dark:text-amber-400 font-semibold">by Maxy Academy</span>
+                </h1>
               </a>
               {!isOnline && (
                 <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-semibold bg-amber-100 text-amber-800 dark:bg-amber-950/80 dark:text-amber-300 border border-amber-300 dark:border-amber-700 animate-pulse whitespace-nowrap">
