@@ -2,27 +2,27 @@
   "name": "UMKM Budget by Maxy Academy",
   "short_name": "UMKM Budget",
   "description": "Aplikasi Budgeting & Realisasi Keuangan UMKM oleh Maxy Academy",
-  "start_url": "/",
-  "scope": "/",
+  "start_url": "./",
+  "scope": "./",
   "display": "standalone",
   "orientation": "portrait",
   "background_color": "#0f172a",
   "theme_color": "#0f172a",
   "icons": [
     {
-      "src": "/icon-192.png",
+      "src": "./icon-192.png",
       "sizes": "192x192",
       "type": "image/png",
       "purpose": "any maskable"
     },
     {
-      "src": "/icon-512.png",
+      "src": "./icon-512.png",
       "sizes": "512x512",
       "type": "image/png",
       "purpose": "any maskable"
     },
     {
-      "src": "/icon.svg",
+      "src": "./icon.svg",
       "sizes": "any",
       "type": "image/svg+xml",
       "purpose": "any"
@@ -32,12 +32,12 @@
   "shortcuts": [
     {
       "name": "Rencana Anggaran",
-      "url": "/?tab=plan",
+      "url": "./?tab=plan",
       "description": "Buka Rencana Anggaran Keuangan"
     },
     {
       "name": "Realisasi Keuangan",
-      "url": "/?tab=realization",
+      "url": "./?tab=realization",
       "description": "Buka Realisasi Keuangan"
     }
   ]

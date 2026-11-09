@@ -1,16 +1,16 @@
 const CACHE_NAME = 'maxy-umkm-budget-v1';
 
 const PRECACHE_URLS = [
-  '/',
-  '/index.html',
-  '/manifest.json',
-  '/favicon.ico',
-  '/favicon.png',
-  '/icon.svg',
-  '/logo-m.png',
-  '/icon-192.png',
-  '/icon-512.png',
-  '/apple-touch-icon.png'
+  './',
+  './index.html',
+  './manifest.json',
+  './favicon.ico',
+  './favicon.png',
+  './icon.svg',
+  './logo-m.png',
+  './icon-192.png',
+  './icon-512.png',
+  './apple-touch-icon.png'
 ];
 
 // Install Event - Pre-cache essential app shell assets

@@ -187,9 +187,9 @@ export default function App() {
         <div className="max-w-7xl w-full mx-auto px-4 md:px-6 h-auto md:h-16 py-3 md:py-0 flex flex-col md:flex-row items-center justify-between gap-3 md:gap-0">
           <div className="flex items-center justify-between w-full md:w-auto">
             <div className="flex items-center gap-2.5 sm:gap-3">
-              <a href="/" className="flex items-center gap-2 sm:gap-2.5 focus:outline-none group">
+              <a href="./" className="flex items-center gap-2 sm:gap-2.5 focus:outline-none group">
                 <img
-                  src="/logo-m.png"
+                  src="./logo-m.png"
                   alt="Maxy Academy Logo"
                   className="h-8 sm:h-9 w-auto object-contain shrink-0 group-hover:scale-105 transition-transform"
                 />

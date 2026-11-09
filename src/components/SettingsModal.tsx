@@ -341,7 +341,7 @@ export function SettingsModal({ isOpen, onClose, data, onUpdateData, onImportDat
           ) : (
             <div className="flex flex-col items-center justify-center py-8 px-4 text-center space-y-4">
               <div className="w-16 h-16 bg-amber-500/10 dark:bg-amber-400/10 border border-amber-500/20 rounded-2xl p-2.5 flex items-center justify-center mb-2 shadow-sm">
-                <img src="/logo-m.png" alt="Maxy Academy" className="w-full h-full object-contain" />
+                <img src="./logo-m.png" alt="Maxy Academy" className="w-full h-full object-contain" />
               </div>
               <h3 className="text-lg font-bold text-slate-800 dark:text-slate-100">Maxy Academy</h3>
               <p className="text-sm text-slate-600 dark:text-slate-300">
