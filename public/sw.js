@@ -64,8 +64,9 @@ self.addEventListener('fetch', (event) => {
           if (networkResponse && networkResponse.ok) {
             const copy = networkResponse.clone();
             caches.open(CACHE_NAME).then((cache) => {
-              cache.put('/', copy);
-              cache.put('/index.html', networkResponse.clone());
+              cache.put(request, copy);
+              cache.put('./', networkResponse.clone());
+              cache.put('./index.html', networkResponse.clone());
             });
           }
           return networkResponse;
@@ -74,9 +75,9 @@ self.addEventListener('fetch', (event) => {
           console.log('[SW] Offline mode: serving cached HTML App Shell');
           const cache = await caches.open(CACHE_NAME);
           const cachedHTML =
-            (await cache.match('/')) ||
-            (await cache.match('/index.html')) ||
-            (await cache.match(request, { ignoreSearch: true }));
+            (await cache.match(request, { ignoreSearch: true })) ||
+            (await cache.match('./')) ||
+            (await cache.match('./index.html'));
 
           if (cachedHTML) {
             return cachedHTML;
