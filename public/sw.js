@@ -7,6 +7,7 @@ const PRECACHE_URLS = [
   '/favicon.ico',
   '/favicon.png',
   '/icon.svg',
+  '/logo-m.png',
   '/icon-192.png',
   '/icon-512.png',
   '/apple-touch-icon.png'

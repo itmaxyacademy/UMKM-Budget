@@ -186,29 +186,24 @@ export default function App() {
       <header className="print:hidden bg-white dark:bg-slate-800 border-b border-slate-200 dark:border-slate-700 sticky top-0 z-10 shrink-0">
         <div className="max-w-7xl w-full mx-auto px-4 md:px-6 h-auto md:h-16 py-3 md:py-0 flex flex-col md:flex-row items-center justify-between gap-3 md:gap-0">
           <div className="flex items-center justify-between w-full md:w-auto">
-            <div className="flex items-center gap-3">
-              <a href="/" className="flex items-center gap-2.5 group focus:outline-none">
+            <div className="flex items-center gap-2.5 sm:gap-3">
+              <a href="/" className="flex items-center gap-2 sm:gap-2.5 focus:outline-none group">
                 <img
-                  src="/icon.svg"
-                  alt="Maxy Academy"
-                  className="w-8 h-8 rounded-lg shadow-sm group-hover:scale-105 transition-transform object-contain"
+                  src="/logo-m.png"
+                  alt="Maxy Academy Logo"
+                  className="h-8 sm:h-9 w-auto object-contain shrink-0 group-hover:scale-105 transition-transform"
                 />
-                <div className="flex flex-col">
-                  <div className="flex items-center gap-1.5">
-                    <span className="text-base md:text-lg font-bold text-slate-900 dark:text-slate-100 tracking-tight leading-none">
-                      UMKM Budget
-                    </span>
-                    <span className="px-1.5 py-0.5 text-[10px] font-extrabold tracking-wider uppercase bg-amber-500/15 text-amber-600 dark:text-amber-400 rounded border border-amber-500/30 leading-none">
-                      PRO
-                    </span>
-                  </div>
-                  <span className="text-[10px] font-semibold text-slate-400 dark:text-slate-500 tracking-wider uppercase leading-tight">
+                <div className="flex items-center gap-2">
+                  <h1 className="text-lg md:text-xl font-extrabold text-slate-900 dark:text-slate-100 tracking-tight whitespace-nowrap">
+                    UMKM Budget <span className="text-indigo-600 dark:text-amber-400 font-semibold">Pro</span>
+                  </h1>
+                  <span className="hidden sm:inline-flex items-center text-[10px] font-bold text-slate-500 dark:text-slate-400 bg-slate-100 dark:bg-slate-700 px-2 py-0.5 rounded-full border border-slate-200 dark:border-slate-600 whitespace-nowrap">
                     by Maxy Academy
                   </span>
                 </div>
               </a>
               {!isOnline && (
-                <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-semibold bg-amber-100 text-amber-800 dark:bg-amber-950/80 dark:text-amber-300 border border-amber-300 dark:border-amber-700 animate-pulse">
+                <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-semibold bg-amber-100 text-amber-800 dark:bg-amber-950/80 dark:text-amber-300 border border-amber-300 dark:border-amber-700 animate-pulse whitespace-nowrap">
                   <WifiOff size={12} />
                   Offline
                 </span>
