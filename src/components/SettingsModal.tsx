@@ -26,7 +26,7 @@ export function SettingsModal({ isOpen, onClose, data, onUpdateData, onImportDat
     if (isInstallable) {
       const success = await installApp();
       if (success) {
-        alert('Aplikasi BeceBudgeting berhasil diinstal!');
+        alert('Aplikasi Maxy UMKM Budget berhasil diinstal!');
       }
     } else {
       alert('Petunjuk Instalasi Aplikasi (PWA):\n\n1. Buka aplikasi ini di browser Chrome, Edge, atau Safari.\n2. Tekan tombol "Instal Aplikasi" / "Tambah ke Layar Utama" di menu browser atau address bar.');
@@ -60,7 +60,7 @@ export function SettingsModal({ isOpen, onClose, data, onUpdateData, onImportDat
         subcategories: c.subcategories.map(g => ({ ...g, items: g.items.map(i => ({ ...i, actual: 0 })) }))
       }))
     };
-    exportToJson(templateData, 'template-becebudgeting');
+    exportToJson(templateData, 'template-maxy-umkm-budget');
   };
 
   const handleImportTemplate = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -260,7 +260,7 @@ export function SettingsModal({ isOpen, onClose, data, onUpdateData, onImportDat
               </button>
 
               <button
-                onClick={() => exportToJson(data, 'data-becebudgeting')}
+                onClick={() => exportToJson(data, 'data-maxy-umkm-budget')}
                 className="flex items-center justify-center gap-2 px-3 py-2 bg-indigo-50 dark:bg-indigo-900/30 hover:bg-indigo-100 dark:hover:bg-indigo-900/50 text-indigo-700 dark:text-indigo-400 rounded-lg text-sm font-medium transition-colors"
               >
                 <Download size={16} />
@@ -308,7 +308,7 @@ export function SettingsModal({ isOpen, onClose, data, onUpdateData, onImportDat
                 <CheckCircle2 size={20} className="text-emerald-600 dark:text-emerald-400 shrink-0" />
                 <div className="text-xs font-medium">
                   <p className="font-bold">Aplikasi Terinstal (PWA)</p>
-                  <p className="text-[11px] opacity-80">Anda sedang menggunakan BeceBudgeting versi aplikasi PWA.</p>
+                  <p className="text-[11px] opacity-80">Anda sedang menggunakan Maxy UMKM Budget versi aplikasi PWA.</p>
                 </div>
               </div>
             ) : isIOS ? (
@@ -329,7 +329,7 @@ export function SettingsModal({ isOpen, onClose, data, onUpdateData, onImportDat
                   className="w-full flex items-center justify-center gap-2 px-4 py-3 bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl text-sm font-bold shadow-md hover:shadow-indigo-500/20 transition-all cursor-pointer active:scale-98"
                 >
                   <Smartphone size={18} />
-                  Instal Aplikasi BeceBudgeting
+                  Instal Aplikasi Maxy UMKM Budget
                 </button>
                 <p className="text-[11px] text-slate-400 dark:text-slate-500 text-center">
                   Bekerja di Google Chrome, Microsoft Edge, Brave, dan Safari.
@@ -340,15 +340,15 @@ export function SettingsModal({ isOpen, onClose, data, onUpdateData, onImportDat
             </>
           ) : (
             <div className="flex flex-col items-center justify-center py-8 px-4 text-center space-y-4">
-              <div className="w-16 h-16 bg-indigo-100 dark:bg-indigo-900/50 rounded-full flex items-center justify-center mb-2">
-                <Settings size={32} className="text-indigo-600 dark:text-indigo-400" />
+              <div className="w-16 h-16 bg-amber-500/10 dark:bg-amber-400/10 border border-amber-500/20 rounded-2xl p-2.5 flex items-center justify-center mb-2 shadow-sm">
+                <img src="/icon.svg" alt="Maxy Academy" className="w-full h-full object-contain" />
               </div>
-              <h3 className="text-lg font-bold text-slate-800 dark:text-slate-100">Kredit</h3>
+              <h3 className="text-lg font-bold text-slate-800 dark:text-slate-100">Maxy Academy</h3>
               <p className="text-sm text-slate-600 dark:text-slate-300">
-                Dibuat oleh <span className="font-semibold">Andy Bintoro (Maxy Academy)</span> untuk kolaborasi bersama KTB UKM dan KBC (Kingdom Business Community).
+                Aplikasi Budgeting & Realisasi Anggaran Keuangan UMKM dipersembahkan oleh <span className="font-semibold text-amber-600 dark:text-amber-400">Maxy Academy</span>.
               </p>
-              <p className="text-sm text-slate-600 dark:text-slate-300 mt-2">
-                Jika ingin melakukan white label atau adopsi kurikulum UKM, dapat menghubungi KBC.
+              <p className="text-xs text-slate-500 dark:text-slate-400 mt-2">
+                Kunjungi kami di <a href="https://maxy.academy" target="_blank" rel="noopener noreferrer" className="text-indigo-600 dark:text-amber-400 hover:underline font-medium">maxy.academy</a> untuk informasi pelatihan, kurikulum, dan solusi teknologi bisnis.
               </p>
             </div>
           )}

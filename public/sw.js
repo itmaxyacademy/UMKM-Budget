@@ -1,12 +1,15 @@
-const CACHE_NAME = 'becebudgeting-pwa-v3';
+const CACHE_NAME = 'maxy-umkm-budget-v1';
 
 const PRECACHE_URLS = [
   '/',
   '/index.html',
   '/manifest.json',
+  '/favicon.ico',
+  '/favicon.png',
   '/icon.svg',
   '/icon-192.png',
-  '/icon-512.png'
+  '/icon-512.png',
+  '/apple-touch-icon.png'
 ];
 
 // Install Event - Pre-cache essential app shell assets
@@ -79,7 +82,7 @@ self.addEventListener('fetch', (event) => {
           }
 
           return new Response(
-            '<!doctype html><html lang="id"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>BeceBudgeting - Offline</title><style>body{font-family:system-ui,sans-serif;background:#0f172a;color:#fff;display:flex;align-items:center;justify-content:center;height:100vh;margin:0;text-align:center;padding:20px}.card{background:#1e293b;padding:32px;border-radius:16px;max-width:400px;box-shadow:0 10px 25px rgba(0,0,0,0.3)}h1{font-size:20px;margin-bottom:12px;color:#f59e0b}p{font-size:14px;color:#94a3b8;line-height:1.5}</style></head><body><div class="card"><h1>Anda Sedang Offline</h1><p>Aplikasi BeceBudgeting siap digunakan offline. Silakan buka kembali setelah halaman pertama kali dimuat saat ada koneksi internet.</p></div></body></html>',
+            '<!doctype html><html lang="id"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Maxy UMKM Budget - Offline</title><style>body{font-family:system-ui,sans-serif;background:#0f172a;color:#fff;display:flex;align-items:center;justify-content:center;height:100vh;margin:0;text-align:center;padding:20px}.card{background:#1e293b;padding:32px;border-radius:16px;max-width:400px;box-shadow:0 10px 25px rgba(0,0,0,0.3)}h1{font-size:20px;margin-bottom:12px;color:#f59e0b}p{font-size:14px;color:#94a3b8;line-height:1.5}</style></head><body><div class="card"><h1>Anda Sedang Offline</h1><p>Aplikasi Maxy UMKM Budget siap digunakan offline. Silakan buka kembali setelah halaman pertama kali dimuat saat ada koneksi internet.</p></div></body></html>',
             { headers: { 'Content-Type': 'text/html; charset=utf-8' } }
           );
         })

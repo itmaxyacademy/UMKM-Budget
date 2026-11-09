@@ -1,13 +1,13 @@
 {
-  "name": "UMKM Budget Pro",
+  "name": "Maxy UMKM Budget Pro",
   "short_name": "UMKM Budget",
-  "description": "Aplikasi Budgeting & Realisasi Keuangan UMKM oleh KBC x KTB UKM",
+  "description": "Aplikasi Budgeting & Realisasi Keuangan UMKM oleh Maxy Academy",
   "start_url": "/",
   "scope": "/",
   "display": "standalone",
   "orientation": "portrait",
   "background_color": "#0f172a",
-  "theme_color": "#4f46e5",
+  "theme_color": "#0f172a",
   "icons": [
     {
       "src": "/icon-192.png",

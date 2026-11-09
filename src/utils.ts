@@ -125,7 +125,7 @@ export const exportToPdf = async (data: BudgetData, mode: 'plan' | 'realization'
   doc.setFontSize(22);
   doc.setTextColor(255, 255, 255);
   doc.setFont('helvetica', 'bold');
-  doc.text(budgetMode === 'business' ? 'UMKM Budget Pro (Business)' : 'UMKM Budget Pro', 14, 25);
+  doc.text(budgetMode === 'business' ? 'Maxy UMKM Budget Pro (Business)' : 'Maxy UMKM Budget Pro', 14, 25);
   
   doc.setFontSize(14);
   doc.setFont('helvetica', 'normal');

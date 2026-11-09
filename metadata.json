@@ -1,6 +1,6 @@
 {
-  "name": "UMKM Budget PRO",
-  "description": "Aplikasi Budgeting & Realisasi Keuangan UMKM oleh KBC x KTB UKM dengan dukungan PWA",
+  "name": "Maxy UMKM Budget PRO",
+  "description": "Aplikasi Budgeting & Realisasi Keuangan UMKM oleh Maxy Academy dengan dukungan PWA",
   "requestFramePermissions": [],
   "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
 }
